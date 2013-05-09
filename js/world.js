@@ -66,6 +66,53 @@ var World = Class.create({
     return this._cells[x][y];
   },
   
+  setElementAtPosition: function(position,element){
+    this._cells[position.x][position.y] = element;
+  },
+  
+  getFreePositionAround: function(position){
+
+    // copy object to avoid accidental tampering
+    var center = {
+      x: position.x,
+      y: position.y
+    };
+    
+    var freeX = [center.x];
+    var freeY = [center.y];
+    
+    // calculate free positions around
+    var xBoundary = makeBoundaries(center.x,1,this._size);
+    var yBoundary = makeBoundaries(center.y,1,this._size);
+        
+    for (var x=xBoundary.min; x<=xBoundary.max; x++){
+      for (var y=yBoundary.min; y<=yBoundary.max; y++){
+        var element = this.getElementAtPosition(x,y);
+        
+        if (!element){
+          freeX.push(x);
+          freeY.push(y);
+        }
+      }
+    }
+    
+    // now pick one
+    if (!freeX.length && !freeY.length){
+      console.log('Cannot find a free position around',x,y);
+      return center;
+    }
+   
+    if (freeX.length){
+      center.x = freeX[Math.floor(Math.random()*freeX.length)];
+    }
+    
+    if (freeY.length){
+      center.y = freeY[Math.floor(Math.random()*freeY.length)];
+    }
+    
+    return center;
+  },
+  
   getSize: function(){
     return this._size;
   }

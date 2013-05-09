@@ -24,6 +24,7 @@ var Agent = Class.create({
     var elements = this.getElementsInRange();
     
     var behavior = new AgentBehavior({
+      agent: this,
       items: this._filterElementsByClassName(elements,'Item'),
       unknownItems: this._filterUnknownItems(elements),
       agents: this._filterElementsByClassName(elements,'Agent'),
@@ -49,6 +50,8 @@ var Agent = Class.create({
   _filterUnknownItems: function(elements){
     var result = []; 
     
+    elements = this._filterElementsByClassName(elements,'Item');
+    
     for (var i in elements){
       if (!this._dictionary[elements[i].getIndex()]){
         result.push(elements[i])
@@ -59,15 +62,8 @@ var Agent = Class.create({
   },
   
   getElementsInRange: function(){
-    var xBoundary = {
-      min: Math.max(0,this._coordinates.x-this._range),
-      max: Math.min(this._state.world.getSize()-1,this._coordinates.x+this._range)
-    };
-    
-    var yBoundary = {
-      min: Math.max(0,this._coordinates.y-this._range),
-      max: Math.min(this._state.world.getSize()-1,this._coordinates.y+this._range)
-    };
+    var xBoundary = this._makeBoundaries(this._coordinates.x);
+    var yBoundary = this._makeBoundaries(this._coordinates.y);
     
     var items = [];
     
@@ -82,6 +78,24 @@ var Agent = Class.create({
     }
     
     return items;
+  },
+  
+  _makeBoundaries: function(coordinate){
+    return makeBoundaries(coordinate,this._range,this._state.world.getSize());
+  },
+  
+  getCoordinates: function(){
+    return this._coordinates;
+  },
+  
+  moveRandomly: function(){
+    
+    var position = this._state.world.getFreePositionAround(this._coordinates);
+    this._state.world.setElementAtPosition(this._coordinates,null);
+    
+    this._coordinates = position;
+    this._state.world.setElementAtPosition(this._coordinates,this);    
+
   },
   
   toString: function(){

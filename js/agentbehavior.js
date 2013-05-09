@@ -8,6 +8,7 @@ var AgentBehavior = Class.create({
   
   getAction: function(){
     var agents = this._state.agents;
+    var agent = this._state.agent;
     var items = this._state.items;
     var unknownItems = this._state.unknownItems;
     var dictionary = this._state.dictionary;
@@ -34,9 +35,8 @@ var AgentBehavior = Class.create({
         }
       }
       else {
-        console.log('cannot find items, moving randomly');
-      }   
-         
+        agent.moveRandomly();
+      }        
     
   },
   
