@@ -53,7 +53,7 @@ var Simulation = Class.create({
     console.log('Simulation running');
     var that = this;
     
-    that._draw();
+    that._initialDraw();
     
     this._runInterval = setInterval(function(){
       console.log('tick');
@@ -76,9 +76,9 @@ var Simulation = Class.create({
     }
   },
   
-  _draw: function(){
+  _initialDraw: function(){
     var canvas = $('#'+this.canvas);
-    canvas.html(this._drawBoard());//+this._drawItems());      
+    canvas.html(this._drawBoard());  
   },
   
   _drawBoard: function(){
@@ -93,14 +93,28 @@ var Simulation = Class.create({
     for (var y=0; y<this.worldSize; y++){
       html+='<tr><th>'+y+'</th>';
       for (var x=0; x<this.worldSize; x++){
-        var element = this._world.getElementAtPosition(x,y);
-        html+='<td>'+(element?element.toString():'')+'</td>';
+        html+='<td></td>';
       }
       html+='</tr>';
     }
     html+='</table>';
     
     return html;
+  },
+  
+  _draw: function(){
+    var cells = $('#'+this.canvas+' td');    
+    var elements = [].concat(this._items).concat(this._agents);
+    
+    cells.html('');
+    
+    for (var i in elements){
+      var element = elements[i];   
+      var position = element.getCoordinates();
+
+      $(cells[position.x+position.y*this._world.getSize()]).html(element.toString());
+    }
+
   },
   
   _drawItems: function(){

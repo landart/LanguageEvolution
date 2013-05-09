@@ -12,6 +12,10 @@ var Item = Class.create({
     this._index = index;
   },
   
+  getCoordinates: function(){
+    return this._coordinates;
+  },
+  
   setCoordinates: function(coords){
     this._coordinates = coords || null;
   },
