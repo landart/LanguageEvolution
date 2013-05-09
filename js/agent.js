@@ -25,6 +25,7 @@ var Agent = Class.create({
     
     var behavior = new AgentBehavior({
       items: this._filterElementsByClassName(elements,'Item'),
+      unknownItems: this._filterUnknownItems(elements),
       agents: this._filterElementsByClassName(elements,'Agent'),
       dictionary: this._dictionary
     })
@@ -38,6 +39,18 @@ var Agent = Class.create({
     
     for (var i in elements){
       if (elements[i].className == className){
+        result.push(elements[i])
+      }
+    }
+    
+    return result;
+  },
+  
+  _filterUnknownItems: function(elements){
+    var result = []; 
+    
+    for (var i in elements){
+      if (!this._dictionary[elements[i].getIndex()]){
         result.push(elements[i])
       }
     }

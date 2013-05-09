@@ -9,21 +9,22 @@ var AgentBehavior = Class.create({
   getAction: function(){
     var agents = this._state.agents;
     var items = this._state.items;
+    var unknownItems = this._state.unknownItems;
     var dictionary = this._state.dictionary;
     
-    console.log('Nearby items',items);
+    console.log('Nearby unknown items',unknownItems);
     console.log('Nearby agents',agents);
     
     // if there is any agent
     if (agents.length){
       console.log('there is an agent, we\'ll see it later');
     }
-    else {
+   
       // otherwise, if there is any item
-      if (items.length){
-        console.log(items.length);
-        var item = items[Math.floor(Math.random(0)*items.length)];
-        console.log('picked item',item);   
+      if (unknownItems.length){
+
+        var item = unknownItems[Math.floor(Math.random(0)*unknownItems.length)];
+        console.log('picked unknown item',item);   
         
         if (!dictionary[item.getIndex()]){
           this._addItemToDictionary(item);
@@ -35,7 +36,7 @@ var AgentBehavior = Class.create({
       else {
         console.log('cannot find items, moving randomly');
       }   
-    }       
+         
     
   },
   
