@@ -10,6 +10,8 @@ table{
 
 h3.success{
   background: #99FF33;
+  padding: 5px;
+  text-align: center;
 }
 
 #legend{
