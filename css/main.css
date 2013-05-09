@@ -1,0 +1,32 @@
+body{
+  font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+}
+
+table td{
+  width: 20px;
+  text-align: center;
+  height: 15px;
+}
+
+table td, table tr{
+  border: 1px solid gray;
+  border-width: 1px 0 0 1px;
+  padding: 3px;
+}
+
+table tr > td:last-child{
+  border-right-width: 1px;
+}
+
+table tr:last-child td{
+  border-bottom-width: 1px;
+}
+
+span.item{
+  background-color:yellow;
+}
+
+span.agent{
+  background-color: red;
+}

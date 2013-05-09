@@ -56,5 +56,13 @@ var World = Class.create({
   
   _getRandomCoordinate: function(){
     return Math.floor((Math.random()*this._size));
+  },
+  
+  getElementAtPosition: function(x,y){
+    if (x === null || y===null){
+      return null;
+    }
+    
+    return this._cells[x][y] || {toString:function(){return '';}};
   }
 }); 
