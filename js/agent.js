@@ -3,7 +3,7 @@ var Agent = Class.create({
   className: 'Agent',
   
   _range: 2,  
-  _dictionary: [],  
+  _dictionary: null,  
   _selectedItem: null,  
   _index: 0,  
   _coordinates: null,
@@ -13,6 +13,7 @@ var Agent = Class.create({
     console.log('You instantiated an agent!');
     this._index = index;
     this._state = state;
+    this._dictionary = [];
   },
   
   setCoordinates: function(coords){
