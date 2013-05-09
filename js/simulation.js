@@ -2,7 +2,7 @@ var Simulation = Class.create({
   
   // configurable params
   numAgents: 6,
-  numItems: 10,
+  numItems: 20,
   worldSize: 10,
   canvas: 'canvas',
 

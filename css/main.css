@@ -4,8 +4,7 @@ body{
 }
 
 table{
-  float: right;
-  width: 72%;
+  width: 99%;
 }
 
 h3.success{
@@ -14,23 +13,8 @@ h3.success{
   text-align: center;
 }
 
-#legend{
-  float: left;
-  width: 27%;
-}
-
-#legend ul{
-  text-align: justify;
-  font-size: 90%;
-  line-height: 175%;
-}
-
-#legent li{
-  margin-bottom: 10px;
-}
-
 table td{
-  width: 55px;
+  width: 88px;
   text-align: center;
   height: 16px;
 }
@@ -58,9 +42,5 @@ span.agent{
 }
 
 #dictionaries td{
-  text-align: left;
-}
-
-#canvas {
-  padding-top: 45px;
+  font-size: 80%;
 }

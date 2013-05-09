@@ -13,22 +13,6 @@
 
         <!-- Add your site or application content here -->
         <div id="results"></div>
-        <div id="legend">
-          <h3>Rules:</h3>
-          <ul>
-            <li>Each turn, each agent puts a name to one unclassified item nearby.</li>
-            <li>When naming or renaming an item, the agent is its "owner".</li>
-            <li>There is a 20% chance that another agent renames an "owned" item (neologism).</li>
-            <li>The agents move randomly every clock tick, no matter what they do.</li>
-            <li>When an agent meets another, the former mixes its dictionary with the latter's:   
-              <ul>
-                <li>The receiver's dictionary fills its gaps with the other agent's.</li>  
-                <li>If both have named an item, there is a 20% (possession) of adoption if the reciver is the "owner", 70% (neologism) if it is the other agent, and 40% (conservative) otherwise.</li>
-              </ul>
-            </li>
-            <li>Finally, the simulation should converge when all the agents have discovered all the items and agreed upon their names.</li>
-          </ul>
-        </div>
         <div id="canvas"></canvas>       
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
