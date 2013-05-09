@@ -20,6 +20,7 @@
         <script src="js/lib/Class-0.0.2.min.js"></script>
         <script src="js/world.js"></script>
         <script src="js/item.js"></script>
+        <script src="js/agentbehavior.js"></script>
         <script src="js/agent.js"></script>
         <script src="js/simulation.js"></script>
 

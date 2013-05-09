@@ -63,6 +63,10 @@ var World = Class.create({
       return null;
     }
     
-    return this._cells[x][y] || {toString:function(){return '';}};
+    return this._cells[x][y];
+  },
+  
+  getSize: function(){
+    return this._size;
   }
 }); 
