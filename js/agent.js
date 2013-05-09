@@ -19,10 +19,7 @@ var Agent = Class.create({
     this._coordinates = coords || null;
   },
   
-  nextStep: function(){
-    
-    console.log('Agent '+this._index+' dictionary:',this._dictionary.toString());
-    
+  nextStep: function(){    
     var elements = this.getElementsInRange();
     
     var behavior = new AgentBehavior({

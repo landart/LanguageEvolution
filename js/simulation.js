@@ -1,9 +1,9 @@
 var Simulation = Class.create({
   
   // configurable params
-  numAgents: 10,
-  numItems: 50,
-  worldSize: 15,
+  numAgents: 6,
+  numItems: 10,
+  worldSize: 10,
   canvas: 'canvas',
 
   // inner attributes
@@ -95,6 +95,22 @@ var Simulation = Class.create({
     }
     html+='</table>';
     
+    html+='<table id="dictionaries">';
+    html+='<tr>';
+    for (var x=-1; x<this.numItems; x++){
+      html+='<th>'+(x>=0?'I'+x:'')+'</th>';
+    }
+    html+='</tr>';
+    
+    for (var h=0; h<this.numAgents; h++){
+      html += '<tr><th>A'+h+'</th>';
+      for (var x=0; x<this.numItems; x++){
+        html+='<td></td>';
+      }
+      html+='</tr>';
+    }
+    html+='</table>';
+    
     return html;
   },
   
@@ -109,6 +125,17 @@ var Simulation = Class.create({
       var position = element.getCoordinates();
 
       $(cells[position.x+position.y*this._world.getSize()]).html(element.toString());
+    }
+    
+    for (var i in this._agents){
+      var element = this._agents[i];  
+      if (element.className == 'Agent'){
+        for (var j in element._dictionary){
+          var td = parseInt(j)+1;
+          var tr = parseInt(i)+1;
+          $($('#dictionaries tr')[tr].children[td]).html(element._dictionary[j]);  
+        }        
+      }
     }
 
   },

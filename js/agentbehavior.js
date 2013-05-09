@@ -13,25 +13,24 @@ var AgentBehavior = Class.create({
     var allItemsCatalogued = this._state.allItemsCatalogued;
     var dictionary = this._state.dictionary;
     
-    // if there is any agent
+    // otherwise, if there are non catalogued items
+    if (!allItemsCatalogued){
+
+      var item = items[Math.floor(Math.random(0)*items.length)]; 
+        
+      if (!dictionary[item.getIndex()]){
+        this._addItemToDictionary(item);
+      }
+    }
+    // besides, if there is any agent, exchange knowledge
     if (agents.length){
       agent.mixDictionaryWith(agents);
       agent.moveRandomly();
     }
-    else {
-      // otherwise, if there is any item
-      if (!allItemsCatalogued){
-
-        var item = items[Math.floor(Math.random(0)*items.length)]; 
-        
-        if (!dictionary[item.getIndex()]){
-          this._addItemToDictionary(item);
-        }
-      }
-      else {
-        agent.moveRandomly();
-      }        
-    }
+      
+    // move anyway so that discovery is fostered
+    agent.moveRandomly();
+    
   },
   
   _addItemToDictionary: function(item){
