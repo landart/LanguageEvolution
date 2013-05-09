@@ -60,3 +60,7 @@ span.agent{
 #dictionaries td{
   text-align: left;
 }
+
+#canvas {
+  padding-top: 45px;
+}
