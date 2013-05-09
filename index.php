@@ -12,6 +12,7 @@
     <body>
 
         <!-- Add your site or application content here -->
+        <div id="results"></div>
         <div id="legend">
           <h3>Rules:</h3>
           <ul>

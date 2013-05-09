@@ -7,6 +7,11 @@ table{
   float: right;
   width: 72%;
 }
+
+h3.success{
+  background: #99FF33;
+}
+
 #legend{
   float: left;
   width: 27%;
