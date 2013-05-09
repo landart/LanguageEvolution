@@ -11,6 +11,7 @@ var Simulation = Class.create({
   _world: null,  
   _items: [],  
   _runInterval: null,
+  _clock: 0,
 
   // constructor
   init: function() {
@@ -71,6 +72,8 @@ var Simulation = Class.create({
       this._agents[index].nextStep();
     }
     
+    this._clock++;
+    
     this._checkConvergence();
   },
   
@@ -78,14 +81,14 @@ var Simulation = Class.create({
     convergence = true;
     
     for (var index=0; index<this._agents.length-1; index++){
-      if(this._agents[index].getDictionary().toString != this._agents[index+1].getDictionary.toString()){
+      if(this._agents[index].getDictionary().toString() != this._agents[index+1].getDictionary().toString()){
         convergence = false;
+        break;
       }      
     }
     
     if (convergence){
-      console.log('The simulation has converged');
-      $('#results').html('<h3 class="success">The simulation has converged</h3>');
+      $('#results').html('<h3 class="success">The simulation has converged in '+this._clock+' iterations</h3>');
       this.stop();
     }
   },
