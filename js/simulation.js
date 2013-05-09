@@ -52,7 +52,7 @@ var Simulation = Class.create({
     
     that._initialDraw();
     
-    this._runInterval = setInterval(function(){
+    this._runInterval = setInterval(function(){     
       that.nextStep();
       that._draw(); 
     },1000);

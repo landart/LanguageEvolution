@@ -10,30 +10,28 @@ var AgentBehavior = Class.create({
     var agents = this._state.agents;
     var agent = this._state.agent;
     var items = this._state.items;
-    var unknownItems = this._state.unknownItems;
+    var allItemsCatalogued = this._state.allItemsCatalogued;
     var dictionary = this._state.dictionary;
     
     // if there is any agent
     if (agents.length){
-      console.log('there is an agent, we\'ll see it later');
+      agent.mixDictionaryWith(agents);
+      agent.moveRandomly();
     }
-   
+    else {
       // otherwise, if there is any item
-      if (unknownItems.length){
+      if (!allItemsCatalogued){
 
-        var item = unknownItems[Math.floor(Math.random(0)*unknownItems.length)]; 
+        var item = items[Math.floor(Math.random(0)*items.length)]; 
         
         if (!dictionary[item.getIndex()]){
           this._addItemToDictionary(item);
-        }
-        else {
-          console.log('I know the item: ',item.getIndex(),dictionary[item.getIndex()]);
         }
       }
       else {
         agent.moveRandomly();
       }        
-    
+    }
   },
   
   _addItemToDictionary: function(item){

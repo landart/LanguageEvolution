@@ -20,12 +20,15 @@ var Agent = Class.create({
   },
   
   nextStep: function(){
+    
+    console.log('Agent '+this._index+' dictionary:',this._dictionary.toString());
+    
     var elements = this.getElementsInRange();
     
     var behavior = new AgentBehavior({
       agent: this,
       items: this._filterElementsByClassName(elements,'Item'),
-      unknownItems: this._filterUnknownItems(elements),
+      allItemsCatalogued: this._allItemsCatalogued(elements),
       agents: this._filterElementsByClassName(elements,'Agent'),
       dictionary: this._dictionary
     })
@@ -46,18 +49,18 @@ var Agent = Class.create({
     return result;
   },
   
-  _filterUnknownItems: function(elements){
-    var result = []; 
+  _allItemsCatalogued: function(elements){
+    var allCatalogued = true; 
     
     elements = this._filterElementsByClassName(elements,'Item');
     
     for (var i in elements){
-      if (!this._dictionary[elements[i].getIndex()]){
-        result.push(elements[i])
+      if (!this._dictionary[elements[i].getIndex()]||elements[i].getLastAgent()==this){
+        allCatalogued = false;
       }
     }
     
-    return result;
+    return allCatalogued;
   },
   
   getElementsInRange: function(){
@@ -95,6 +98,31 @@ var Agent = Class.create({
     this._coordinates = position;
     this._state.world.setElementAtPosition(this._coordinates,this);    
 
+  },
+  
+  mixDictionaryWith: function(agents){
+    for (var index in agents){
+      var agentDic = agents[index].getDictionary();
+      var dic = this._dictionary;
+      
+      for (var i in dic){
+        // case 1: this agent does not know, foreigner does
+        if (!dic[i]&&agentDic[i]){
+          dic[i]=agentDic[i];
+        }
+        // case 2: both agents know
+        if (dic[i]&&agentDic[i]){
+          // 20% chance that we accept foreigner's word
+          if (Math.random()<0.2){
+            dic[i]=agentDic[i];
+          }
+        }
+      }
+    }
+  },
+  
+  getDictionary: function(){
+    return this._dictionary;
   },
   
   toString: function(){

@@ -5,7 +5,7 @@ var Item = Class.create({
   _coordinates: null,
   _index: 0,
   _lastName: '',
-  _speaker: null,
+  _lastAgent: null,
 
   init: function(index) {
     this._index = index;
@@ -23,9 +23,13 @@ var Item = Class.create({
     return this._index;
   },
   
-  setName: function(speaker,name){
+  setName: function(agent,name){
     this._lastName = name;
-    this._speaker = speaker;
+    this._lastAgent = agent;
+  },
+  
+  getLastAgent: function(){
+    return this._lastAgent; 
   },
     
   toString: function(){
