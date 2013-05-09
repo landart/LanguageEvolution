@@ -26,6 +26,7 @@ var Agent = Class.create({
       agent: this,
       items: this._filterElementsByClassName(elements,'Item'),
       allItems: this._state.items,
+      world: this._state.world,
       allItemsCatalogued: this._allItemsCatalogued(elements),
       agents: this._filterElementsByClassName(elements,'Agent'),
       dictionary: this._dictionary
@@ -88,14 +89,8 @@ var Agent = Class.create({
     return this._coordinates;
   },
   
-  moveRandomly: function(){
-    
-    var position = this._state.world.getFreePositionAround(this._coordinates);
-    this._state.world.setElementAtPosition(this._coordinates,null);
-    
-    this._coordinates = position;
-    this._state.world.setElementAtPosition(this._coordinates,this);    
-
+  setCoordinates: function(coords){
+    this._coordinates = coords;
   },
   
   getDictionary: function(){

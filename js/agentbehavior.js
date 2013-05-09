@@ -25,12 +25,24 @@ var AgentBehavior = Class.create({
     // besides, if there is any agent, exchange knowledge
     if (agents.length){
       this._mixDictionaries();
-      agent.moveRandomly();
     }
       
     // move anyway so that discovery is fostered
-    agent.moveRandomly();
+    this._moveAgent();
     
+  },
+
+  _moveAgent: function() {
+    
+    var world = this._state.world;
+    var agent = this._state.agent;
+
+    var position = world.getFreePositionAround(agent.getCoordinates());
+    world.setElementAtPosition(agent.getCoordinates(), null);
+
+    agent.setCoordinates(position);
+    world.setElementAtPosition(position, agent);
+
   },
   
   _mixDictionaries: function(){ 
