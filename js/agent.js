@@ -25,6 +25,7 @@ var Agent = Class.create({
     var behavior = new AgentBehavior({
       agent: this,
       items: this._filterElementsByClassName(elements,'Item'),
+      allItems: this._state.items,
       allItemsCatalogued: this._allItemsCatalogued(elements),
       agents: this._filterElementsByClassName(elements,'Agent'),
       dictionary: this._dictionary
@@ -52,7 +53,7 @@ var Agent = Class.create({
     elements = this._filterElementsByClassName(elements,'Item');
     
     for (var i in elements){
-      if (!this._dictionary[elements[i].getIndex()]||elements[i].getLastAgent()==this){
+      if (!this._dictionary[elements[i].getIndex()]){
         allCatalogued = false;
       }
     }
@@ -95,27 +96,6 @@ var Agent = Class.create({
     this._coordinates = position;
     this._state.world.setElementAtPosition(this._coordinates,this);    
 
-  },
-  
-  mixDictionaryWith: function(agents){
-    for (var index in agents){
-      var agentDic = agents[index].getDictionary();
-      var dic = this._dictionary;
-      
-      for (var i in dic){
-        // case 1: this agent does not know, foreigner does
-        if (!dic[i]&&agentDic[i]){
-          dic[i]=agentDic[i];
-        }
-        // case 2: both agents know
-        if (dic[i]&&agentDic[i]){
-          // 20% chance that we accept foreigner's word
-          if (Math.random()<0.2){
-            dic[i]=agentDic[i];
-          }
-        }
-      }
-    }
   },
   
   getDictionary: function(){

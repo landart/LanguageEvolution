@@ -23,9 +23,16 @@ var Item = Class.create({
     return this._index;
   },
   
-  setName: function(agent,name){
-    this._lastName = name;
-    this._lastAgent = agent;
+  getLastName: function(){
+    return this._lastName;
+  },
+  
+  setLastName: function(name){
+    this._lastName = name || this._lastName;    
+  },
+  
+  setLastAgent: function(agent){
+    this._lastAgent = agent || this._lastAgent;
   },
   
   getLastAgent: function(){

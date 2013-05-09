@@ -16,10 +16,16 @@
         <div id="legend">
           <h3>Rules:</h3>
           <ul>
-            <li>Each agent puts a name to the unclassified items nearby.</li>
-            <li>When an agent puts a name to an item previously classified by another one, the former will name it when it is close again.</li>
-            <li>The agents move randomly every clock tick, no matter what.</li>
-            <li>When an agent meets another, the former asks the latter for its dictionary, which uses to fill its gaps. If the latter had different values for items than the latter had already classified, there is a chance of 20% that it will accept it as a neologism.</li>
+            <li>Each turn, each agent puts a name to one unclassified item nearby.</li>
+            <li>When naming or renaming an item, the agent is its "owner".</li>
+            <li>There is a 20% chance that another agent renames an "owned" item (neologism).</li>
+            <li>The agents move randomly every clock tick, no matter what they do.</li>
+            <li>When an agent meets another, the former mixes its dictionary with the latter's:   
+              <ul>
+                <li>The receiver's dictionary fills its gaps with the other agent's.</li>  
+                <li>If both have named an item, there is a 20% (possession) of adoption if the reciver is the "owner", 70% (neologism) if it is the other agent, and 40% (conservative) otherwise.</li>
+              </ul>
+            </li>
             <li>Finally, the simulation should converge when all the agents have discovered all the items and agreed upon their names.</li>
           </ul>
         </div>
