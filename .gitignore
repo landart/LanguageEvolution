@@ -1,0 +1,15 @@
+*.class
+*.merge-left*
+*.merge-right*
+*.mine
+*.prej
+*.pyc
+*.pyo
+*.working
+.directory
+.project
+.svn
+_svn
+svn-commit*.tmp
+.settings
+.settings/com.aptana.editor.php.prefs
