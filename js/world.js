@@ -78,39 +78,30 @@ var World = Class.create({
       y: position.y
     };
     
-    var freeX = [center.x];
-    var freeY = [center.y];
-    
+    var free = [center];
+     
     // calculate free positions around
-    var xBoundary = makeBoundaries(center.x,1,this._size);
-    var yBoundary = makeBoundaries(center.y,1,this._size);
+    var xBoundary = this._makeBoundaries(center.x);
+    var yBoundary = this._makeBoundaries(center.y);
         
     for (var x=xBoundary.min; x<=xBoundary.max; x++){
-      for (var y=yBoundary.min; y<=yBoundary.max; y++){
-        var element = this.getElementAtPosition(x,y);
-        
-        if (!element){
-          freeX.push(x);
-          freeY.push(y);
+      for (var y=yBoundary.min; y<=yBoundary.max; y++){     
+        if (this._cells[x][y] === null){
+          free.push({x:x,y:y});
         }
       }
     }
     
-    // now pick one
-    if (!freeX.length && !freeY.length){
-      console.log('Cannot find a free position around',x,y);
+    if (free.length){
+      return free[Math.floor(Math.random()*free.length)];
+    }
+    
+    console.log('Cannot find a free position around',center.x,center.y);
       return center;
-    }
-   
-    if (freeX.length){
-      center.x = freeX[Math.floor(Math.random()*freeX.length)];
-    }
-    
-    if (freeY.length){
-      center.y = freeY[Math.floor(Math.random()*freeY.length)];
-    }
-    
-    return center;
+  },
+  
+  _makeBoundaries: function(coordinate){
+    return makeBoundaries(coordinate,1,this._size);
   },
   
   getSize: function(){
