@@ -11,9 +11,18 @@
     </head>
     <body>
 
-
         <!-- Add your site or application content here -->
-        <div id="canvas"></canvas>
+        <div id="legend">
+          <h3>Rules:</h3>
+          <ul>
+            <li>Each agent puts a name to the unclassified items nearby.</li>
+            <li>When an agent puts a name to an item previously classified by another one, the former will name it when it is close again.</li>
+            <li>The agents move randomly every clock tick, no matter what.</li>
+            <li>When an agent meets another, the former asks the latter for its dictionary, which uses to fill its gaps. If the latter had different values for items than the latter had already classified, there is a chance of 20% that it will accept it as a neologism.</li>
+            <li>Finally, the simulation should converge when all the agents have discovered all the items and agreed upon their names.</li>
+          </ul>
+        </div>
+        <div id="canvas"></canvas>       
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>

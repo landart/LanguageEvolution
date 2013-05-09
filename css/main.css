@@ -3,6 +3,25 @@ body{
   font-size: 10pt;
 }
 
+table{
+  float: right;
+  width: 72%;
+}
+#legend{
+  float: left;
+  width: 27%;
+}
+
+#legend ul{
+  text-align: justify;
+  font-size: 90%;
+  line-height: 175%;
+}
+
+#legent li{
+  margin-bottom: 10px;
+}
+
 table td{
   width: 55px;
   text-align: center;
@@ -29,4 +48,8 @@ span.item{
 
 span.agent{
   background-color: red;
+}
+
+#dictionaries td{
+  text-align: left;
 }
