@@ -52,14 +52,10 @@ var AgentBehavior = Class.create({
   },
   
   _getRandomName: function(){
-    var name = "";
-    var options = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    for( var i=0; i < 6; i++ ){
-        name += options.charAt(Math.floor(Math.random() * options.length));
-    }      
+    var options = ['rock','sand','stone','water','river','mountain','hill','grass','tree','animal','dog','cow','lion','sky','space','sun','moon','Mars','Venus','Pluto','Jupiter','Saturn','Mercury','Neptune','fish','tuna','boat','cloud','wind','air','plant','apple','pear','banana','tomato','onion','lettuce','snail','rat','creek','bread','milk','beer','bear','wolf','eagle','chicken','asteroid','planet','beach','paramount','cliff','reef','whale','shark','turtle','crab'];
 
-    return name;
+    return options[Math.floor(Math.random()*options.length)];
   }
   
   
