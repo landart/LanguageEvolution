@@ -13,9 +13,6 @@ var AgentBehavior = Class.create({
     var unknownItems = this._state.unknownItems;
     var dictionary = this._state.dictionary;
     
-    console.log('Nearby unknown items',unknownItems);
-    console.log('Nearby agents',agents);
-    
     // if there is any agent
     if (agents.length){
       console.log('there is an agent, we\'ll see it later');
@@ -24,8 +21,7 @@ var AgentBehavior = Class.create({
       // otherwise, if there is any item
       if (unknownItems.length){
 
-        var item = unknownItems[Math.floor(Math.random(0)*unknownItems.length)];
-        console.log('picked unknown item',item);   
+        var item = unknownItems[Math.floor(Math.random(0)*unknownItems.length)]; 
         
         if (!dictionary[item.getIndex()]){
           this._addItemToDictionary(item);
@@ -46,9 +42,6 @@ var AgentBehavior = Class.create({
     
     dictionary[item.getIndex()] = name;
     item.setName(this,name);
-    
-    
-    console.log('I found an item:',item.getIndex(),dictionary[item.getIndex()]);
   },
   
   _getRandomName: function(){

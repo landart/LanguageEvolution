@@ -1,8 +1,8 @@
 var Simulation = Class.create({
   
   // configurable params
-  numAgents: 5,
-  numItems: 25,
+  numAgents: 10,
+  numItems: 50,
   worldSize: 15,
   canvas: 'canvas',
 
@@ -14,8 +14,6 @@ var Simulation = Class.create({
 
   // constructor
   init: function() {
-    console.log('You instantiated a simulation!');
-    
     this._initWorld();
     this._initItems();
     this._initAgents();
@@ -50,13 +48,11 @@ var Simulation = Class.create({
   
   // execution
   run: function(){
-    console.log('Simulation running');
     var that = this;
     
     that._initialDraw();
     
     this._runInterval = setInterval(function(){
-      console.log('tick');
       that.nextStep();
       that._draw(); 
     },1000);

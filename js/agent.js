@@ -10,7 +10,6 @@ var Agent = Class.create({
   _state: null,
  
   init: function(index,state) {
-    console.log('You instantiated an agent!');
     this._index = index;
     this._state = state;
     this._dictionary = [];
@@ -21,7 +20,6 @@ var Agent = Class.create({
   },
   
   nextStep: function(){
-    console.log('Agent',this._index,'is calculating next step');
     var elements = this.getElementsInRange();
     
     var behavior = new AgentBehavior({

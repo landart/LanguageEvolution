@@ -8,7 +8,6 @@ var Item = Class.create({
   _speaker: null,
 
   init: function(index) {
-    console.log('You instantiated an object!');
     this._index = index;
   },
   

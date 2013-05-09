@@ -5,7 +5,6 @@ var World = Class.create({
 
   init: function(size) {
     this._size = size || this._size;
-    console.log('You instantiated a world of size '+this._size+'!');
     
     this._initCells();
   },
@@ -17,7 +16,6 @@ var World = Class.create({
         this._cells[x][y] = null;
       }
     }
-    console.log(this._cells);
   },
   
   place: function(element){
@@ -96,8 +94,8 @@ var World = Class.create({
       return free[Math.floor(Math.random()*free.length)];
     }
     
-    console.log('Cannot find a free position around',center.x,center.y);
-      return center;
+    console.warn('Cannot find a free position around',center.x,center.y);
+    return center;
   },
   
   _makeBoundaries: function(coordinate){
