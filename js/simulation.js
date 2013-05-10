@@ -12,6 +12,7 @@ var Simulation = Class.create({
   _items: [],  
   _kraken: null,
   _runInterval: null,
+  _running: false,
   _clock: 0,
 
   // constructor
@@ -41,8 +42,22 @@ var Simulation = Class.create({
   },
   
   releaseTheKraken: function(){
+    console.log('Releasing the Kraken...');
     this._kraken =  new Kraken(this.getState());
     this._world.place(this._kraken);
+    
+    if (!this._running){
+      this.start();
+    }
+    
+    this._showLockKrakenMessage();
+  },
+  
+  lockTheKraken: function(){
+    this._world.setElementAtPosition(this._kraken.getCoordinates(),null);
+    this._kraken = null;
+    
+    this._clearMessage();
   },
   
   getState: function(){
@@ -54,11 +69,14 @@ var Simulation = Class.create({
   },
   
   // execution
-  run: function(){
+  run: function(){    
+    this._initialDraw();
+    this._launchInterval();
+    this._running = true;
+  },
+  
+  _launchInterval: function(){
     var that = this;
-    
-    that._initialDraw();
-    
     this._runInterval = setInterval(function(){     
       that.nextStep();
       that._draw(); 
@@ -67,10 +85,14 @@ var Simulation = Class.create({
   
   stop: function(){
     clearInterval(this._runInterval);
+    this._running = false;
+    this._clock = 0;
   },
   
   start: function(){
-    this.run();
+    this._launchInterval();
+    this._clearMessage();
+    this._running = true;
   },
   
   nextStep: function(){
@@ -98,9 +120,29 @@ var Simulation = Class.create({
     }
     
     if (convergence){
-      $('#results').html('<h3 class="success">The simulation has converged in '+this._clock+' iterations</h3>');
+      this._showSuccessMessage();
       this.stop();
     }
+  },
+  
+  _showLockKrakenMessage: function(){
+    $('#results').html('<h3>The Kraken has been released, producing chaos. <a id="lockTheKraken" href="#">Lock it!</a></h3>');
+    
+    $("#lockTheKraken").click($.proxy(function () {
+      this.lockTheKraken();
+    },this));
+  },
+  
+  _showSuccessMessage: function(){
+    $('#results').html('<h3 class="success">The simulation has converged in '+this._clock+' iterations. <a id="releaseTheKraken" href="#">Release the Kraken!</a></h3>');
+    
+    $("#releaseTheKraken").click($.proxy(function () {
+      this.releaseTheKraken();
+    },this));
+  },
+  
+  _clearMessage: function(){
+    $('#results').html('');
   },
   
   _initialDraw: function(){
