@@ -3,8 +3,7 @@ var Agent = Class.create({
   className: 'Agent',
   
   _range: 3,  
-  _dictionary: null,  
-  _selectedItem: null,  
+  _dictionary: null,   
   _index: 0,  
   _coordinates: null,
   _state: null,

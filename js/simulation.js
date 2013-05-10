@@ -10,6 +10,7 @@ var Simulation = Class.create({
   _agents: [],  
   _world: null,  
   _items: [],  
+  _kraken: null,
   _runInterval: null,
   _clock: 0,
 
@@ -37,6 +38,11 @@ var Simulation = Class.create({
       this._agents[i] = new Agent(i,this.getState());
       this._world.place(this._agents[i]);
     }
+  },
+  
+  releaseTheKraken: function(){
+    this._kraken =  new Kraken(this.getState());
+    this._world.place(this._kraken);
   },
   
   getState: function(){
@@ -70,6 +76,10 @@ var Simulation = Class.create({
   nextStep: function(){
     for (var index in this._agents){
       this._agents[index].nextStep();
+    }
+    
+    if (this._kraken){
+      this._kraken.nextStep();
     }
     
     this._clock++;
@@ -138,7 +148,10 @@ var Simulation = Class.create({
   _draw: function(){
     var cells = $('#'+this.canvas+' td');    
     var elements = [].concat(this._items).concat(this._agents);
-    
+    if (this._kraken){
+      elements = elements.concat(this._kraken);
+    }
+
     cells.html('');
     
     for (var i in elements){

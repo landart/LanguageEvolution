@@ -21,8 +21,11 @@
         <script src="js/helper.js"></script>
         <script src="js/world.js"></script>
         <script src="js/item.js"></script>
+        <script src="js/behavior.js"></script>
         <script src="js/agentbehavior.js"></script>
         <script src="js/agent.js"></script>
+        <script src="js/krakenbehavior.js"></script>
+        <script src="js/kraken.js"></script>
         <script src="js/simulation.js"></script>
 
     </body>

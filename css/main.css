@@ -38,6 +38,10 @@ span.item{
 }
 
 span.agent{
+  background-color: #9999FF;
+}
+
+span.kraken{
   background-color: red;
 }
 

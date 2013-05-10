@@ -68,7 +68,7 @@ var World = Class.create({
     this._cells[position.x][position.y] = element;
   },
   
-  getFreePositionAround: function(position){
+  getFreePositionAround: function(position,distance){
 
     // copy object to avoid accidental tampering
     var center = {
@@ -79,8 +79,8 @@ var World = Class.create({
     var free = [center];
      
     // calculate free positions around
-    var xBoundary = this._makeBoundaries(center.x);
-    var yBoundary = this._makeBoundaries(center.y);
+    var xBoundary = this._makeBoundaries(center.x,distance);
+    var yBoundary = this._makeBoundaries(center.y,distance);
         
     for (var x=xBoundary.min; x<=xBoundary.max; x++){
       for (var y=yBoundary.min; y<=yBoundary.max; y++){     
@@ -98,8 +98,8 @@ var World = Class.create({
     return center;
   },
   
-  _makeBoundaries: function(coordinate){
-    return makeBoundaries(coordinate,1,this._size);
+  _makeBoundaries: function(coordinate,distance){
+    return makeBoundaries(coordinate,distance||1,this._size);
   },
   
   getSize: function(){
