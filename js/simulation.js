@@ -4,11 +4,14 @@ var Simulation = Class.create({
   numAgents: 4,
   numItems: 10,
   worldSize: 10,
+  defaultBarbarianHordeSize: 2,
+  speed: 50, // ticks by second
   console: '#console',
   map: '#map',
   dictionaries: '#dictionaries',
-  defaultBarbarianHordeSize: 2,
-  speed: 50, // ticks by second
+  actionReset: '#action-reset',
+  actionPlay: '#action-play',
+  actionPause: '#action-pause',
 
   // inner attributes
   _agents: [],  
@@ -22,16 +25,95 @@ var Simulation = Class.create({
   _$dictionaries: null,
 
   // constructor
-  init: function() {
+  init: function () {
+    this._initGui();
     this._initWorld();
     this._initItems();
     this._initAgents();
     this._initConsole();
   },
-  
-  _initWorld: function(){
+
+  _onReset: function (event) {
+    this.reset();
+  },
+
+  _onPlay: function (event) {
+    this.play();
+  },
+
+  _onPause: function (event) {
+    this.pause();
+  },
+
+  _keyHandler: function (event) {
+    switch (event.keyCode) {
+      case 80: // p
+        this._onPlay(event);
+        break;
+      case 82: // r
+        this._onReset(event);
+        break;
+      case 83: // s
+        this._onPause(event);
+        break;
+    }
+  },
+
+  _initGui: function () {
     this._$map = $(this.map);
     this._$dictionaries = $(this.dictionaries);
+    $(this.actionReset)
+      .click($.proxy(this._onReset, this))
+      .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Reset', content: 'Shortcut <kbd>R</kbd>', container: 'body' });
+    $(this.actionPlay)
+      .click($.proxy(this._onPlay, this))
+      .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Play', content: 'Shortcut <kbd>P</kbd>', container: 'body' });
+    $(this.actionPause)
+      .click($.proxy(this._onPause, this))
+      .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Pause', content: 'Shortcut <kbd>S</kbd>', container: 'body' });
+    $(window.document).bind('keyup', $.proxy(this._keyHandler, this));
+    this._buildGui();
+  },
+
+  _buildGui: function(){
+    this._buildMap();
+    this._buildDictionaries();
+  },
+
+  _buildMap: function () {
+    var size = this.worldSize,
+        table = this._$map,
+        body = $(document.createElement('tbody')),
+        row;
+
+    for (var i = 0; i < size; i++) {
+      row = $(document.createElement('tr'));
+      for (var j = 0; j < size; j++) {
+        row.append(document.createElement('td'));
+      }
+      body.append(row);
+    }
+    table.append(body);
+  },
+
+  _buildDictionaries: function () {
+    var rows = this.numAgents,
+        cells = this.numItems,
+        table = this._$dictionaries,
+        body = $(document.createElement('tbody')),
+        row;
+
+    for (var i = 0; i < rows; i++) {
+      row = $(document.createElement('tr'));
+      for (var j = 0; j < cells; j++) {
+        row.append(document.createElement('td'));
+      }
+      body.append(row);
+    }
+    table.append(body);
+  },
+  
+  _initWorld: function(){
     this._world = new World(this.worldSize);
   },
   
@@ -76,31 +158,40 @@ var Simulation = Class.create({
     }
   },
   
-  // execution
-  run: function(){    
-    this._initialDraw();
-    this._launchInterval();
-    this._running = true;
+  reset: function () {
+    this._clock = 0;
+    this._clearMessage();
+    this.stop();
+    this.play();
+  },
+
+  play: function() {
+    if (!this._running) {
+      this._setupInterval();
+      this._running = true;
+    }
+  },
+
+  stop: function(){
+    // something else about stop?
+    this.pause();
+  },
+
+  pause: function () {
+    this._removeInterval();
+    this._running = false;
   },
   
-  _launchInterval: function(){
+  _setupInterval: function () {
     var that = this;
-    this._runInterval = setInterval(function(){     
+    this._runInterval = setInterval(function () {     
       that.nextStep();
       that._draw(); 
-    },1000/this.speed);
+    }, 1000/this.speed);
   },
-  
-  stop: function(){
+
+  _removeInterval: function () {
     clearInterval(this._runInterval);
-    this._running = false;
-    this._clock = 0;
-  },
-  
-  start: function(){
-    this._launchInterval();
-    this._clearMessage();
-    this._running = true;
   },
   
   nextStep: function(){
@@ -140,44 +231,6 @@ var Simulation = Class.create({
     this._console.clear();
   },
   
-  _initialDraw: function(){
-    this._buildMap();
-    this._buildDictionaries();
-  },
-
-  _buildMap: function () {
-    var size = this.worldSize,
-        table = this._$map,
-        body = $(document.createElement('tbody')),
-        row;
-
-    for (var i = 0; i < size; i++) {
-      row = $(document.createElement('tr'));
-      for (var j = 0; j < size; j++) {
-        row.append(document.createElement('td'));
-      }
-      body.append(row);
-    }
-    table.append(body);
-  },
-
-  _buildDictionaries: function () {
-    var rows = this.numAgents,
-        cells = this.numItems,
-        table = this._$dictionaries,
-        body = $(document.createElement('tbody')),
-        row;
-
-    for (var i = 0; i < rows; i++) {
-      row = $(document.createElement('tr'));
-      for (var j = 0; j < cells; j++) {
-        row.append(document.createElement('td'));
-      }
-      body.append(row);
-    }
-    table.append(body);
-  },
-  
   _draw: function() {
     var mapCells = this._$map.find('td'),
         dictionariesRows = this._$dictionaries.find('tr'),
@@ -202,19 +255,6 @@ var Simulation = Class.create({
 
   },
   
-  _drawItems: function(){
-    var html = '<ul id="items">';
-    
-    for (var index in this._items){
-      html += '<li>'+this._items[index].toString()+'</li>';
-    }
-    
-    html += '</ul>'
-    
-    return html;
-  }
-  
 }); 
 
 var evolution = new Simulation();
-evolution.run();
