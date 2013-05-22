@@ -5,7 +5,7 @@ var BarbarianBehavior = Class.create(Behavior.prototype,{
   getAction: function(){
     // corrupt item names
     var items = this._state.items;
-    var item = items[Math.floor(Math.random(0)*items.length)]; 
+    var item = items[Math.floor(Math.random()*items.length)]; 
     
     item.setLastName(this._getRandomName());
     item.setLastAgent(this);

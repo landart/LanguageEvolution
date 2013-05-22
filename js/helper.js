@@ -23,3 +23,8 @@ function filterElementsByClassName(elements, className) {
 
   return result;
 };
+
+function getRandomCardinalPoint(){
+  var cardinalPoints = ['north','east','south','west'];
+  return cardinalPoints[Math.round(Math.random()*4)];
+}

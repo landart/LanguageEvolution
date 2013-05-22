@@ -3,12 +3,12 @@ var Simulation = Class.create({
   // configurable params
   numAgents: 4,
   numItems: 10,
-  worldSize: 5,
+  worldSize: 10,
   console: '#console',
   map: '#map',
   dictionaries: '#dictionaries',
   defaultBarbarianHordeSize: 2,
-  speed: 5, // ticks by second
+  speed: 50, // ticks by second
 
   // inner attributes
   _agents: [],  
@@ -57,10 +57,13 @@ var Simulation = Class.create({
   launchBarbarianHorde: function(size){
     size = size || this.defaultBarbarianHordeSize;
     
+    var entry = getRandomCardinalPoint();
+    var exit = getRandomCardinalPoint();
+    
     for (var i = 0; i<size; i++){
       var j = this._agents.length + i;
       
-      this._agents[j] = new Barbarian(i,this.getState());
+      this._agents[j] = new Barbarian(i,this.getState(),entry,exit);
       this._world.place(this._agents[j]);
     }
   },

@@ -5,7 +5,11 @@ var Barbarian = Class.create(Agent.prototype,{
   _range: 3,
   _genoma: '111001', // 6 bit, 111001 = barbarian agent
   
-  init: function(index,state) {
+  _entrySide: 'north',
+  _exitSide: 'south',
+  
+  // entry, exit = north|east|south|west
+  init: function(index,state,entry,exit) {
     this._addRandomGene(index);
     
     this._index = index;
@@ -21,7 +25,9 @@ var Barbarian = Class.create(Agent.prototype,{
       allItems: this._state.items,
       world: this._state.world,
       items: filterElementsByClassName(elements,'Item'),
-      agents: filterElementsByClassName(elements,'Agent')
+      agents: filterElementsByClassName(elements,'Settler'),
+      entry: this._entrySide,
+      exit: this._exitSide
     })
     
     behavior.getAction();  
