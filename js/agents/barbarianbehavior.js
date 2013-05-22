@@ -1,4 +1,4 @@
-var KrakenBehavior = Class.create(Behavior.prototype,{
+var BarbarianBehavior = Class.create(Behavior.prototype,{
   
   _speed: 2,
     

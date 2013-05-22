@@ -1,6 +1,6 @@
-var Agent = Class.create({
+var Settler = Class.create({
 
-  className: 'Agent',
+  className: 'Settler',
   
   _range: 3,  
   _dictionary: null,   
@@ -21,7 +21,7 @@ var Agent = Class.create({
   nextStep: function(){    
     var elements = this.getElementsInRange();
     
-    var behavior = new AgentBehavior({
+    var behavior = new SettlerBehavior({
       agent: this,
       items: this._filterElementsByClassName(elements,'Item'),
       allItems: this._state.items,
@@ -97,6 +97,6 @@ var Agent = Class.create({
   },
   
   toString: function(){
-    return '<span class="agent">A'+this._index+'</span>';
+    return '<span class="agent">S'+this._index+'</span>';
   }
 }); 

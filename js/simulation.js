@@ -36,7 +36,7 @@ var Simulation = Class.create({
   
   _initAgents: function(){
     for (var i = 0; i<this.numAgents; i++){
-      this._agents[i] = new Agent(i,this.getState());
+      this._agents[i] = new Settler(i,this.getState());
       this._world.place(this._agents[i]);
     }
   },
@@ -205,7 +205,7 @@ var Simulation = Class.create({
     
     for (var i in this._agents){
       var element = this._agents[i];  
-      if (element.className == 'Agent'){
+      if (element.className == 'Settler'){
         for (var j in element._dictionary){
           var td = parseInt(j)+1;
           var tr = parseInt(i)+1;

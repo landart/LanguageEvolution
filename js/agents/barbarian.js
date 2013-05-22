@@ -1,6 +1,6 @@
-var Kraken = Class.create(Agent.prototype,{
+var Barbarian = Class.create(Agent.prototype,{
 
-  className: 'Kraken',
+  className: 'Barbarian',
   
   _range: 5,
   
@@ -12,7 +12,7 @@ var Kraken = Class.create(Agent.prototype,{
   nextStep: function(){    
     var elements = this.getElementsInRange();
     
-    var behavior = new KrakenBehavior({
+    var behavior = new BarbarianBehavior({
       agent: this,
       allItems: this._state.items,
       world: this._state.world,
@@ -25,7 +25,7 @@ var Kraken = Class.create(Agent.prototype,{
   },
   
   toString: function(){
-    return '<span class="kraken">K</span>';
+    return '<span class="barbarian">B</span>';
   }
   
 }); // Inherits!!

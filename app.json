@@ -1,0 +1,72 @@
+{
+    "name": "LE",
+    "js": [
+        {
+            "path": "lib/jquery/jquery-1.9.1.min.js"
+        },
+        {
+            "path": "lib/jquery/Class-0.0.2.min.js"
+        },
+        {
+            "path": "js/helper.js",
+            "update": "delta"
+        },
+        {
+            "path": "js/item.js",
+            "update": "delta"
+        },
+        { 
+            "path": "js/agents/behavior.js",
+            "update": "delta"  
+        },
+        { 
+            "path": "js/agents/agent.js",
+            "update": "delta"  
+        },
+        { 
+            "path": "js/agents/barbarian.js",
+            "update": "delta"  
+        },
+        { 
+            "path": "js/agents/barbarianbehavior.js",
+            "update": "delta"  
+        },
+        { 
+            "path": "js/agents/settler.js",
+            "update": "delta"  
+        },
+        { 
+            "path": "js/agents/settlerbehavior.js",
+            "update": "delta"  
+        },
+        { 
+            "path": "js/world.js",
+            "update": "delta"  
+        },
+        { 
+            "path": "js/simulation.js",
+            "update": "delta"  
+        }
+    ],
+    
+    "css": [
+        {
+            "path": "lib/bootstrap/2.3.2/css/bootstrap.min.css",
+            "update": "delta"
+        },
+        {
+            "path": "css/main.css",
+            "update": "delta" 
+        }
+    ],
+    
+    "appCache": {
+        "cache": [
+            "index.html"
+        ],
+        "network": [
+            "*"
+        ],
+        "fallback": []
+    }
+ }

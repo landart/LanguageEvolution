@@ -1,4 +1,4 @@
-var AgentBehavior = Class.create(Behavior.prototype,{
+var SettlerBehavior = Class.create(Behavior.prototype,{
   
   _speed: 1, 
   
