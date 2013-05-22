@@ -44,6 +44,10 @@
             "update": "delta"  
         },
         { 
+            "path": "js/console.js",
+            "update": "delta"  
+        },
+        { 
             "path": "js/simulation.js",
             "update": "delta"  
         }

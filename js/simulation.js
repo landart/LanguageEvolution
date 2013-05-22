@@ -4,7 +4,9 @@ var Simulation = Class.create({
   numAgents: 4,
   numItems: 10,
   worldSize: 5,
-  canvas: 'canvas',
+  console: '#console',
+  map: '#map',
+  dictionaries: '#dictionaries',
 
   // inner attributes
   _agents: [],  
@@ -14,15 +16,21 @@ var Simulation = Class.create({
   _runInterval: null,
   _running: false,
   _clock: 0,
+  _console: null,
+  _$map: null,
+  _$dictionaries: null,
 
   // constructor
   init: function() {
     this._initWorld();
     this._initItems();
     this._initAgents();
+    this._initConsole();
   },
   
   _initWorld: function(){
+    this._$map = $(this.map);
+    this._$dictionaries = $(this.dictionaries);
     this._world = new World(this.worldSize);
   },
   
@@ -39,6 +47,10 @@ var Simulation = Class.create({
       this._agents[i] = new Settler(i,this.getState());
       this._world.place(this._agents[i]);
     }
+  },
+
+  _initConsole: function () {
+    this._console = new Console({ container: this.console });
   },
   
   releaseTheKraken: function(){
@@ -80,7 +92,7 @@ var Simulation = Class.create({
     this._runInterval = setInterval(function(){     
       that.nextStep();
       that._draw(); 
-    },1000);
+    },10);
   },
   
   stop: function(){
@@ -126,90 +138,87 @@ var Simulation = Class.create({
   },
   
   _showLockKrakenMessage: function(){
-    $('#results').html('<h3>The Kraken has been released, producing chaos. <a id="lockTheKraken" href="#">Lock it!</a></h3>');
+    this._console.info('The Kraken has been released, producing chaos. <a id="lockTheKraken" href="#">Lock it!</a>');
     
     $("#lockTheKraken").click($.proxy(function () {
       this.lockTheKraken();
     },this));
   },
   
-  _showSuccessMessage: function(){
-    $('#results').html('<h3 class="success">The simulation has converged in '+this._clock+' iterations. <a id="releaseTheKraken" href="#">Release the Kraken!</a></h3>');
-    
+  _showSuccessMessage: function() {
+    this._console.success('The simulation has converged in ' + this._clock + ' iterations. <a id="releaseTheKraken" href="#">Release the Kraken!</a>');
+
     $("#releaseTheKraken").click($.proxy(function () {
       this.releaseTheKraken();
     },this));
   },
   
   _clearMessage: function(){
-    $('#results').html('');
+    this._console.clear();
   },
   
   _initialDraw: function(){
-    var canvas = $('#'+this.canvas);
-    canvas.html(this._drawBoard());  
+    this._buildMap();
+    this._buildDictionaries();
+  },
+
+  _buildMap: function () {
+    var size = this.worldSize,
+        table = this._$map,
+        body = $(document.createElement('tbody')),
+        row;
+
+    for (var i = 0; i < size; i++) {
+      row = $(document.createElement('tr'));
+      for (var j = 0; j < size; j++) {
+        row.append(document.createElement('td'));
+      }
+      body.append(row);
+    }
+    table.append(body);
+  },
+
+  _buildDictionaries: function () {
+    var rows = this.numAgents,
+        cells = this.numItems,
+        table = this._$dictionaries,
+        body = $(document.createElement('tbody')),
+        row;
+
+    for (var i = 0; i < rows; i++) {
+      row = $(document.createElement('tr'));
+      for (var j = 0; j < cells; j++) {
+        row.append(document.createElement('td'));
+      }
+      body.append(row);
+    }
+    table.append(body);
   },
   
-  _drawBoard: function(){
-    var html = '<table id="board">';
-    
-    html += '<tr><th></th>';
-    for (var h=0; h<this.worldSize; h++){
-      html += '<th>'+h+'</th>';
-    }
-    html += '</tr>'
-    
-    for (var y=0; y<this.worldSize; y++){
-      html+='<tr><th>'+y+'</th>';
-      for (var x=0; x<this.worldSize; x++){
-        html+='<td></td>';
-      }
-      html+='</tr>';
-    }
-    html+='</table>';
-    
-    html+='<table id="dictionaries">';
-    html+='<tr>';
-    for (var x=-1; x<this.numItems; x++){
-      html+='<th>'+(x>=0?'I'+x:'')+'</th>';
-    }
-    html+='</tr>';
-    
-    for (var h=0; h<this.numAgents; h++){
-      html += '<tr><th>A'+h+'</th>';
-      for (var x=0; x<this.numItems; x++){
-        html+='<td></td>';
-      }
-      html+='</tr>';
-    }
-    html+='</table>';
-    
-    return html;
-  },
-  
-  _draw: function(){
-    var cells = $('#'+this.canvas+' td');    
-    var elements = [].concat(this._items).concat(this._agents);
+  _draw: function() {
+    var mapCells = this._$map.find('td'),
+        dictionariesRows = this._$dictionaries.find('tr'),
+        elements = [].concat(this._items).concat(this._agents);
+
     if (this._kraken){
       elements = elements.concat(this._kraken);
     }
 
-    cells.html('');
+    mapCells.html('');
     
     for (var i in elements){
       var element = elements[i];   
       var position = element.getCoordinates();
-
-      $(cells[position.x+position.y*this._world.getSize()]).html(element.toString());
+      $(mapCells[position.x+position.y*this._world.getSize()]).html(element.toString());
     }
     
     for (var i in this._agents){
       var element = this._agents[i];  
       if (element.className == 'Settler'){
         for (var j in element._dictionary){
-          var td = parseInt(j)+1;
-          var tr = parseInt(i)+1;
-          $($('#dictionaries tr')[tr].children[td]).html(element._dictionary[j]);  
+          var td = parseInt(j);
+          var tr = parseInt(i);
+          $(dictionariesRows[tr]).children().eq(td).html(element._dictionary[j]);  
         }        
       }
     }
