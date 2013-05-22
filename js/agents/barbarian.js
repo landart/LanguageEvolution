@@ -3,10 +3,14 @@ var Barbarian = Class.create(Agent.prototype,{
   className: 'Barbarian',
   
   _range: 5,
+  _genoma: '111001', // 6 bit, 111001 = barbarian agent
   
-  init: function(state) {
-    this.sup();
+  init: function(index,state) {
+    this._addRandomGene(index);
+    
+    this._index = index;
     this._state = state;
+    this._dictionary = [];
   },
   
   nextStep: function(){    

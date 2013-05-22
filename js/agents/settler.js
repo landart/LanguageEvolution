@@ -3,21 +3,14 @@ var Settler = Class.create(Agent.prototype,{
   className: 'Settler',
   
   _range: 3,  
-  _dictionary: null,   
-  _coordinates: null,
-  _state: null,
   _genoma: '110001', // 6 bit, 110001 = settler agent
  
   init: function(index,state) {
-    this.addRandomGene(index);
+    this._addRandomGene(index);
     
     this._index = index;
     this._state = state;
     this._dictionary = [];
-  },
-  
-  setCoordinates: function(coords){
-    this._coordinates = coords || null;
   },
   
   nextStep: function(){    
@@ -25,11 +18,11 @@ var Settler = Class.create(Agent.prototype,{
     
     var behavior = new SettlerBehavior({
       agent: this,
-      items: this._filterElementsByClassName(elements,'Item'),
+      items: filterElementsByClassName(elements,'Item'),
       allItems: this._state.items,
       world: this._state.world,
       allItemsCatalogued: this._allItemsCatalogued(elements),
-      agents: this._filterElementsByClassName(elements,'Settler'),
+      agents: filterElementsByClassName(elements,'Settler'),
       dictionary: this._dictionary
     })
     
@@ -37,22 +30,12 @@ var Settler = Class.create(Agent.prototype,{
     
   },
   
-  _filterElementsByClassName: function(elements,className){
-    var result = []; 
-    
-    for (var i in elements){
-      if (elements[i].className == className){
-        result.push(elements[i])
-      }
-    }
-    
-    return result;
-  },
+  
   
   _allItemsCatalogued: function(elements){
     var allCatalogued = true; 
     
-    elements = this._filterElementsByClassName(elements,'Item');
+    elements = filterElementsByClassName(elements,'Item');
     
     for (var i in elements){
       if (!this._dictionary[elements[i].getIndex()]){

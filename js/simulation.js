@@ -7,12 +7,12 @@ var Simulation = Class.create({
   console: '#console',
   map: '#map',
   dictionaries: '#dictionaries',
+  defaultBarbarianHordeSize: 5,
 
   // inner attributes
   _agents: [],  
   _world: null,  
   _items: [],  
-  _kraken: null,
   _runInterval: null,
   _running: false,
   _clock: 0,
@@ -53,23 +53,15 @@ var Simulation = Class.create({
     this._console = new Console({ container: this.console });
   },
   
-  releaseTheKraken: function(){
-    console.log('Releasing the Kraken...');
-    this._kraken =  new Kraken(this.getState());
-    this._world.place(this._kraken);
+  launchBarbarianHorde: function(size){
+    size = size || this._defaultBarbarianHordeSize;
     
-    if (!this._running){
-      this.start();
+    for (var i = 0; i<size; i++){
+      var j = this._agents.length + i -1;
+      
+      this._agents[j] = new Barbarian(i,this.getState());
+      this._world.place(this._agents[j]);
     }
-    
-    this._showLockKrakenMessage();
-  },
-  
-  lockTheKraken: function(){
-    this._world.setElementAtPosition(this._kraken.getCoordinates(),null);
-    this._kraken = null;
-    
-    this._clearMessage();
   },
   
   getState: function(){
@@ -112,10 +104,6 @@ var Simulation = Class.create({
       this._agents[index].nextStep();
     }
     
-    if (this._kraken){
-      this._kraken.nextStep();
-    }
-    
     this._clock++;
     
     this._checkConvergence();
@@ -136,15 +124,7 @@ var Simulation = Class.create({
       this.stop();
     }
   },
-  
-  _showLockKrakenMessage: function(){
-    this._console.info('The Kraken has been released, producing chaos. <a id="lockTheKraken" href="#">Lock it!</a>');
     
-    $("#lockTheKraken").click($.proxy(function () {
-      this.lockTheKraken();
-    },this));
-  },
-  
   _showSuccessMessage: function() {
     this._console.success('The simulation has converged in ' + this._clock + ' iterations. <a id="releaseTheKraken" href="#">Release the Kraken!</a>');
 
@@ -200,10 +180,6 @@ var Simulation = Class.create({
         dictionariesRows = this._$dictionaries.find('tr'),
         elements = [].concat(this._items).concat(this._agents);
 
-    if (this._kraken){
-      elements = elements.concat(this._kraken);
-    }
-
     mapCells.html('');
     
     for (var i in elements){
@@ -214,13 +190,11 @@ var Simulation = Class.create({
     
     for (var i in this._agents){
       var element = this._agents[i];  
-      if (element.className == 'Settler'){
-        for (var j in element._dictionary){
-          var td = parseInt(j);
-          var tr = parseInt(i);
-          $(dictionariesRows[tr]).children().eq(td).html(element._dictionary[j]);  
-        }        
-      }
+      for (var j in element._dictionary){
+        var td = parseInt(j);
+        var tr = parseInt(i);
+        $(dictionariesRows[tr]).children().eq(td).html(element._dictionary[j]);  
+      }        
     }
 
   },
