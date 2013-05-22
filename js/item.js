@@ -6,9 +6,11 @@ var Item = Class.create({
   _index: 0,
   _lastName: '',
   _lastAgent: null,
+  _genoma: '101001', // 6 bit, 101001 = type item
 
   init: function(index) {
     this._index = index;
+    this._genoma += pad(new Number(index).toString(2),6); // and 6 bit, random
   },
   
   getCoordinates: function(){

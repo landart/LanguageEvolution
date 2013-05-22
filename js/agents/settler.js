@@ -1,14 +1,16 @@
-var Settler = Class.create({
+var Settler = Class.create(Agent.prototype,{
 
   className: 'Settler',
   
   _range: 3,  
   _dictionary: null,   
-  _index: 0,  
   _coordinates: null,
   _state: null,
+  _genoma: '110001', // 6 bit, 110001 = settler agent
  
   init: function(index,state) {
+    this.addRandomGene(index);
+    
     this._index = index;
     this._state = state;
     this._dictionary = [];
