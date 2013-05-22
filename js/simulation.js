@@ -8,7 +8,7 @@ var Simulation = Class.create({
   map: '#map',
   dictionaries: '#dictionaries',
   defaultBarbarianHordeSize: 2,
-  speed: 100, // ticks by second
+  speed: 5, // ticks by second
 
   // inner attributes
   _agents: [],  
