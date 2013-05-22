@@ -13,3 +13,5 @@ _svn
 svn-commit*.tmp
 .settings
 .settings/com.aptana.editor.php.prefs
+*.sublime-project
+*.sublime-workspace
