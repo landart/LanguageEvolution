@@ -7,7 +7,8 @@ var Simulation = Class.create({
   console: '#console',
   map: '#map',
   dictionaries: '#dictionaries',
-  defaultBarbarianHordeSize: 5,
+  defaultBarbarianHordeSize: 2,
+  speed: 100, // ticks by second
 
   // inner attributes
   _agents: [],  
@@ -54,10 +55,10 @@ var Simulation = Class.create({
   },
   
   launchBarbarianHorde: function(size){
-    size = size || this._defaultBarbarianHordeSize;
+    size = size || this.defaultBarbarianHordeSize;
     
     for (var i = 0; i<size; i++){
-      var j = this._agents.length + i -1;
+      var j = this._agents.length + i;
       
       this._agents[j] = new Barbarian(i,this.getState());
       this._world.place(this._agents[j]);
@@ -84,7 +85,7 @@ var Simulation = Class.create({
     this._runInterval = setInterval(function(){     
       that.nextStep();
       that._draw(); 
-    },10);
+    },1000/this.speed);
   },
   
   stop: function(){
@@ -121,15 +122,14 @@ var Simulation = Class.create({
     
     if (convergence){
       this._showSuccessMessage();
-      this.stop();
     }
   },
     
   _showSuccessMessage: function() {
-    this._console.success('The simulation has converged in ' + this._clock + ' iterations. <a id="releaseTheKraken" href="#">Release the Kraken!</a>');
+    this._console.success('The simulation has converged in ' + this._clock + ' iterations. <a id="launchBarbarianHorde" href="#">Launch a Barbarian Horde!</a>');
 
-    $("#releaseTheKraken").click($.proxy(function () {
-      this.releaseTheKraken();
+    $("#launchBarbarianHorde").click($.proxy(function () {
+      this.launchBarbarianHorde();
     },this));
   },
   

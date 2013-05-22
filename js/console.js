@@ -9,33 +9,41 @@ var Console = Class.create({
     this._$console = $(options.container)
   },
 
-  info: function (html) {
-    this._buildAlert(html, 'alert alert-info');
+  info: function (html, params) {
+    this._buildAlert(html, params, 'alert alert-info');
   },
 
-  success: function (html) {
-    this._buildAlert(html, 'alert alert-success');
+  success: function (html, params) {
+    this._buildAlert(html, params, 'alert alert-success');
   },
 
-  warning: function (html) {
-    this._buildAlert(html, 'alert');
+  warning: function (html, params) {
+    this._buildAlert(html, params, 'alert');
   },
 
-  error: function (html) {
-    this._buildAlert(html, 'alert alert-error');
+  error: function (html, params) {
+    this._buildAlert(html, params, 'alert alert-error');
   },
 
   clear: function () {
     this._$console.html('');
   },
 
-  _buildAlert: function (html, classes) {
-    var $alert = $(document.createElement('div')),
-        $child = $(document.createElement('div'));
+  _buildAlert: function (html, params, classes) {
+   
+    if (params && params.log){
+      // do something so that messages are logged
+      return; // ??
+    }
+    
+    // avoid overwriting message if there is already one
+    if (this._$console.html().trim() !== ""){
+      return;
+    }
+    
+    var $alert = $(document.createElement('div'));
     $alert.addClass(classes);
-    $child.html(html);
-    $alert.append($child);
-    this._$console.append($alert);
+    $alert.html(html);
+    this._$console.html($alert);
   }
-
 });
