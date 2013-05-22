@@ -29,7 +29,7 @@ var Settler = Class.create(Agent.prototype,{
       allItems: this._state.items,
       world: this._state.world,
       allItemsCatalogued: this._allItemsCatalogued(elements),
-      agents: this._filterElementsByClassName(elements,'Agent'),
+      agents: this._filterElementsByClassName(elements,'Settler'),
       dictionary: this._dictionary
     })
     
