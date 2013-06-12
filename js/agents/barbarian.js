@@ -15,8 +15,11 @@ var Barbarian = Class.create(Agent.prototype,{
     this._index = index;
     this._state = state;
     this._dictionary = [];
+
+    this._behavior = new SettlerBehavior();
   },
   
+  /*
   nextStep: function(){    
     var elements = this.getElementsInRange();
     
@@ -33,6 +36,7 @@ var Barbarian = Class.create(Agent.prototype,{
     behavior.getAction();  
     
   },
+  */
   
   toString: function(){
     return '<span class="barbarian">B</span>';

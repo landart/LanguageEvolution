@@ -7,7 +7,8 @@ var Agent = Class.create({
   _coordinates: null,
   _$cell: null,
   
-  // _genoma: '110000', // 6 bit, 110000 = general agent
+  _index: 0,    
+  _genoma: '110000', // 6 bit, 110000 = general agent
   
   _dictionary: null,   
   

@@ -1,7 +1,5 @@
 var SettlerBehavior = Class.create(Behavior.prototype,{
-  
-  _speed: 1, 
-  
+
   getAction: function(){
     var agents = this._state.agents;
     var agent = this._state.agent;

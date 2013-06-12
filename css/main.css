@@ -56,10 +56,20 @@ kbd {
    cursor: pointer;
 }
 
-
-table{
-  width: 99%;
+#map {
+  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
+#map tbody {
+  display: block;
+}
+#map td {
+  width: 10px;
+  height: 10px;
+  border-color: #ddd;
+}
+
 
 h3.success{
   background: #99FF33;

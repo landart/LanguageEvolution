@@ -14,24 +14,20 @@
             "path": "js/helper.js",
             "update": "delta"
         },
+        { 
+            "path": "js/agenthelper.js",
+            "update": "delta"  
+        },
+        {
+            "path": "js/event.js",
+            "update": "delta"
+        },
         {
             "path": "js/item.js",
             "update": "delta"
         },
         { 
-            "path": "js/agents/behavior.js",
-            "update": "delta"  
-        },
-        { 
-            "path": "js/agents/agent.js",
-            "update": "delta"  
-        },
-        { 
-            "path": "js/agents/barbarian.js",
-            "update": "delta"  
-        },
-        { 
-            "path": "js/agents/barbarianbehavior.js",
+            "path": "js/agent.js",
             "update": "delta"  
         },
         { 
@@ -39,11 +35,7 @@
             "update": "delta"  
         },
         { 
-            "path": "js/agents/settlerbehavior.js",
-            "update": "delta"  
-        },
-        { 
-            "path": "js/world.js",
+            "path": "js/map.js",
             "update": "delta"  
         },
         { 

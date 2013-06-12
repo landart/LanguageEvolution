@@ -1,3 +1,5 @@
+
+
 var Settler = Class.create(Agent.prototype,{
 
   className: 'Settler',
@@ -11,11 +13,15 @@ var Settler = Class.create(Agent.prototype,{
     this._index = index;
     this._state = state;
     this._dictionary = [];
+
+    this._behavior = new SettlerBehavior();
   },
   
+  /*
   nextStep: function(){    
     var elements = this.getElementsInRange();
     
+
     var behavior = new SettlerBehavior({
       agent: this,
       items: filterElementsByClassName(elements,'Item'),
@@ -26,9 +32,10 @@ var Settler = Class.create(Agent.prototype,{
       dictionary: this._dictionary
     })
     
-    behavior.getAction();  
+    behavior.getAction(); 
     
-  },
+
+  },*/
   
   
   
@@ -50,3 +57,26 @@ var Settler = Class.create(Agent.prototype,{
     return '<span class="agent">S'+this._index+'</span>';
   }
 }); 
+
+var Settler = {
+
+  name: 'Settler',
+  range: 3,
+  criticism: 0.3,
+  karma: 0.2,
+  
+
+  behavior: function (helper) {
+    helper.randomMove(0.5);
+  },
+
+  whenMeetAgent: function (helper) {
+    helper.corrupt(0.1);
+    helper.kill(0.1);
+  },
+
+  whenFindItem: function (helper) {
+    helper.learn();
+  },
+
+};

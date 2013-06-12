@@ -5,7 +5,7 @@ var Simulation = Class.create({
     numItems: 10,
     speed: 50,                        // Ticks per second
     barbarianHordeSize: 2,
-    worldSize: 10,
+    worldSize: 40,
     console: '#console',
     map: '#map',
     dictionaries: '#dictionaries',
@@ -15,20 +15,22 @@ var Simulation = Class.create({
   },
 
   // inner attributes
-  _agents: [],  
-  _world: null,  
+  _agentClasses: null,
+  _agents: [],   
   _items: [],  
   _runInterval: null,
   _running: false,
   _clock: 0,
   _console: null,
-  _$map: null,
+  _map: null,
   _$dictionaries: null,
 
   // constructor
-  init: function () {
+  init: function (agents) {
+    this._agentClasses = agents;
+
     this._initGui();
-    this._initWorld();
+    this._initMap();
     this._initItems();
     this._initAgents();
     this._initConsole();
@@ -76,25 +78,8 @@ var Simulation = Class.create({
     this._buildGui();
   },
 
-  _buildGui: function(){
-    this._buildMap();
+  _buildGui: function() {
     this._buildDictionaries();
-  },
-
-  _buildMap: function () {
-    var size = this.options.worldSize,
-        table = this._$map,
-        body = $(document.createElement('tbody')),
-        row;
-
-    for (var i = 0; i < size; i++) {
-      row = $(document.createElement('tr'));
-      for (var j = 0; j < size; j++) {
-        row.append(document.createElement('td'));
-      }
-      body.append(row);
-    }
-    table.append(body);
   },
 
   _buildDictionaries: function () {
@@ -114,22 +99,29 @@ var Simulation = Class.create({
     table.append(body);
   },
   
-  _initWorld: function(){
-    this._world = new World(this.options.worldSize);
+  _initMap: function (){
+    this._map = new Map(this.options.map, {
+      size: this.options.worldSize,
+    });
   },
   
-  _initItems: function(){
+  _initItems: function () {
+    var item;
+
     for (var i =0; i < this.options.numItems; i++){
-      this._items[i] = new Item(i);
-      
-      this._world.place(this._items[i]);
+      item = new Item(this.getState());
+      this._items[i] = item;
+      this._map.placeAtRandomCoordinates(item);
     }
   },
   
-  _initAgents: function(){
-    for (var i = 0; i < this.options.numAgents; i++){
-      this._agents[i] = new Settler(i, this.getState());
-      this._world.place(this._agents[i]);
+  _initAgents: function () {
+    var agent;
+
+    for (var i = 0; i < this.options.numAgents; i++) {
+      agent = new Agent(this._agentClasses[0], this.getState());
+      this._agents.push(agent);
+      this._map.placeAtRandomCoordinates(agent);
     }
   },
 
@@ -154,7 +146,7 @@ var Simulation = Class.create({
   getState: function(){
     return {
       items: this._items,
-      world: this._world,
+      map: this._map,
       agents: this._agents
     }
   },
@@ -186,8 +178,7 @@ var Simulation = Class.create({
   _setupInterval: function () {
     var that = this;
     this._runInterval = setInterval(function () {     
-      that.nextStep();
-      that._draw(); 
+      that.tick();
     }, 1000/this.options.speed);
   },
 
@@ -195,14 +186,14 @@ var Simulation = Class.create({
     clearInterval(this._runInterval);
   },
   
-  nextStep: function(){
-    for (var index in this._agents){
-      this._agents[index].nextStep();
+  tick: function() {
+    for (var i in this._agents) {
+      this._agents[i].tick();
     }
     
     this._clock++;
     
-    this._checkConvergence();
+    // this._checkConvergence();
   },
   
   _checkConvergence: function(){
@@ -232,30 +223,6 @@ var Simulation = Class.create({
     this._console.clear();
   },
   
-  _draw: function() {
-    var mapCells = this._$map.find('td'),
-        dictionariesRows = this._$dictionaries.find('tr'),
-        elements = [].concat(this._items).concat(this._agents);
-
-    mapCells.html('');
-    
-    for (var i in elements){
-      var element = elements[i];   
-      var position = element.getCoordinates();
-      $(mapCells[position.x+position.y*this._world.getSize()]).html(element.toString());
-    }
-    
-    for (var i in this._agents){
-      var element = this._agents[i];  
-      for (var j in element._dictionary){
-        var td = parseInt(j);
-        var tr = parseInt(i);
-        $(dictionariesRows[tr]).children().eq(td).html(element._dictionary[j]);  
-      }        
-    }
-
-  },
-  
 }); 
 
-var evolution = new Simulation();
+var evolution = new Simulation([ Settler ]);

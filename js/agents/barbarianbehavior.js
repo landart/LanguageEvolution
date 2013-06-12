@@ -1,6 +1,4 @@
 var BarbarianBehavior = Class.create(Behavior.prototype,{
-  
-  _speed: 2,
     
   getAction: function(){
     // corrupt item names
