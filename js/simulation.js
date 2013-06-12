@@ -1,17 +1,18 @@
 var Simulation = Class.create({
-  
-  // configurable params
-  numAgents: 4,
-  numItems: 10,
-  worldSize: 10,
-  defaultBarbarianHordeSize: 2,
-  speed: 50, // ticks by second
-  console: '#console',
-  map: '#map',
-  dictionaries: '#dictionaries',
-  actionReset: '#action-reset',
-  actionPlay: '#action-play',
-  actionPause: '#action-pause',
+
+  options: {
+    numAgents: 4,
+    numItems: 10,
+    speed: 50,                        // Ticks per second
+    barbarianHordeSize: 2,
+    worldSize: 10,
+    console: '#console',
+    map: '#map',
+    dictionaries: '#dictionaries',
+    actionReset: '#action-reset',
+    actionPlay: '#action-play',
+    actionPause: '#action-pause',
+  },
 
   // inner attributes
   _agents: [],  
@@ -60,8 +61,8 @@ var Simulation = Class.create({
   },
 
   _initGui: function () {
-    this._$map = $(this.map);
-    this._$dictionaries = $(this.dictionaries);
+    this._$map = $(this.options.map);
+    this._$dictionaries = $(this.options.dictionaries);
     $(this.actionReset)
       .click($.proxy(this._onReset, this))
       .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Reset', content: 'Shortcut <kbd>R</kbd>', container: 'body' });
@@ -81,7 +82,7 @@ var Simulation = Class.create({
   },
 
   _buildMap: function () {
-    var size = this.worldSize,
+    var size = this.options.worldSize,
         table = this._$map,
         body = $(document.createElement('tbody')),
         row;
@@ -97,8 +98,8 @@ var Simulation = Class.create({
   },
 
   _buildDictionaries: function () {
-    var rows = this.numAgents,
-        cells = this.numItems,
+    var rows = this.options.numAgents,
+        cells = this.options.numItems,
         table = this._$dictionaries,
         body = $(document.createElement('tbody')),
         row;
@@ -114,11 +115,11 @@ var Simulation = Class.create({
   },
   
   _initWorld: function(){
-    this._world = new World(this.worldSize);
+    this._world = new World(this.options.worldSize);
   },
   
   _initItems: function(){
-    for (var i =0; i<this.numItems; i++){
+    for (var i =0; i < this.options.numItems; i++){
       this._items[i] = new Item(i);
       
       this._world.place(this._items[i]);
@@ -126,26 +127,26 @@ var Simulation = Class.create({
   },
   
   _initAgents: function(){
-    for (var i = 0; i<this.numAgents; i++){
-      this._agents[i] = new Settler(i,this.getState());
+    for (var i = 0; i < this.options.numAgents; i++){
+      this._agents[i] = new Settler(i, this.getState());
       this._world.place(this._agents[i]);
     }
   },
 
   _initConsole: function () {
-    this._console = new Console({ container: this.console });
+    this._console = new Console({ container: this.options.console });
   },
   
-  launchBarbarianHorde: function(size){
-    size = size || this.defaultBarbarianHordeSize;
+  launchBarbarianHorde: function(size) {
+    size = size || this.options.barbarianHordeSize;
     
     var entry = getRandomCardinalPoint();
     var exit = getRandomCardinalPoint();
     
-    for (var i = 0; i<size; i++){
+    for (var i = 0; i < size; i++){
       var j = this._agents.length + i;
       
-      this._agents[j] = new Barbarian(i,this.getState(),entry,exit);
+      this._agents[j] = new Barbarian(i, this.getState(), entry, exit);
       this._world.place(this._agents[j]);
     }
   },
@@ -187,7 +188,7 @@ var Simulation = Class.create({
     this._runInterval = setInterval(function () {     
       that.nextStep();
       that._draw(); 
-    }, 1000/this.speed);
+    }, 1000/this.options.speed);
   },
 
   _removeInterval: function () {
@@ -207,8 +208,8 @@ var Simulation = Class.create({
   _checkConvergence: function(){
     convergence = true;
     
-    for (var index=0; index<this._agents.length-1; index++){
-      if(this._agents[index].getDictionary().toString() != this._agents[index+1].getDictionary().toString()){
+    for (var index=0; index < this._agents.length-1; index++){
+      if (this._agents[index].getDictionary().toString() != this._agents[index+1].getDictionary().toString()) {
         convergence = false;
         break;
       }      
