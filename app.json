@@ -14,10 +14,6 @@
             "path": "js/helper.js",
             "update": "delta"
         },
-        { 
-            "path": "js/agenthelper.js",
-            "update": "delta"  
-        },
         {
             "path": "js/event.js",
             "update": "delta"
@@ -31,7 +27,7 @@
             "update": "delta"  
         },
         { 
-            "path": "js/agents/settler.js",
+            "path": "js/agents/settlerbehavior.js",
             "update": "delta"  
         },
         { 

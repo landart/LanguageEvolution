@@ -1,4 +1,4 @@
-var BarbarianBehavior = Class.create(Behavior.prototype,{
+/*var BarbarianBehavior = Class.create(Behavior.prototype,{
     
   getAction: function(){
     // corrupt item names
@@ -46,4 +46,4 @@ var BarbarianBehavior = Class.create(Behavior.prototype,{
     }
   }  
   
-});
+});*/

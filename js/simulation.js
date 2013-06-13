@@ -1,10 +1,23 @@
 var Simulation = Class.create({
 
   options: {
-    numAgents: 4,
-    numItems: 10,
+    agents: {
+      'settler': {
+        'behavior': SettlerBehavior,
+        'num': 4
+      },
+      'barbarian': {
+        //'behavior': BarbarianBehavior,
+        'num': 2
+      },
+      'item': {
+        //'behavior': ItemBehavior,
+        'num': 10
+      }
+    },
+
     speed: 50,                        // Ticks per second
-    barbarianHordeSize: 2,
+
     worldSize: 40,
     console: '#console',
     map: '#map',
@@ -15,7 +28,6 @@ var Simulation = Class.create({
   },
 
   // inner attributes
-  _agentClasses: null,
   _agents: [],   
   _items: [],  
   _runInterval: null,
@@ -26,9 +38,7 @@ var Simulation = Class.create({
   _$dictionaries: null,
 
   // constructor
-  init: function (agents) {
-    this._agentClasses = agents;
-
+  init: function () {
     this._initGui();
     this._initMap();
     this._initItems();
@@ -83,8 +93,8 @@ var Simulation = Class.create({
   },
 
   _buildDictionaries: function () {
-    var rows = this.options.numAgents,
-        cells = this.options.numItems,
+    var rows = this.options.agents.settler.num,
+        cells = this.options.agents.item.num,
         table = this._$dictionaries,
         body = $(document.createElement('tbody')),
         row;
@@ -108,7 +118,7 @@ var Simulation = Class.create({
   _initItems: function () {
     var item;
 
-    for (var i =0; i < this.options.numItems; i++){
+    for (var i =0; i < this.options.agents.item.num; i++){
       item = new Item(this.getState());
       this._items[i] = item;
       this._map.placeAtRandomCoordinates(item);
@@ -118,8 +128,8 @@ var Simulation = Class.create({
   _initAgents: function () {
     var agent;
 
-    for (var i = 0; i < this.options.numAgents; i++) {
-      agent = new Agent(this._agentClasses[0], this.getState());
+    for (var i = 0; i < this.options.agents.settler.num; i++) {
+      agent = new Agent(this.options.agents.settler.behavior, this.getState());
       this._agents.push(agent);
       this._map.placeAtRandomCoordinates(agent);
     }
@@ -130,7 +140,7 @@ var Simulation = Class.create({
   },
   
   launchBarbarianHorde: function(size) {
-    size = size || this.options.barbarianHordeSize;
+    size = size || this.options.agents.barbarian.num;
     
     var entry = getRandomCardinalPoint();
     var exit = getRandomCardinalPoint();
@@ -225,4 +235,4 @@ var Simulation = Class.create({
   
 }); 
 
-var evolution = new Simulation([ Settler ]);
+var evolution = new Simulation();
