@@ -240,9 +240,8 @@ var Simulation = Class.create({
     this._$iterationField.text(this._clock);
     
     if (this._checkConvergence()){
-     
       this._showSuccessMessage();
-    
+      this.stop();    
     }
   },
   
