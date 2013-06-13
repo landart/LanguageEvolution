@@ -47,17 +47,14 @@ var Agent = Class.create({
   },
   
   allItemsInRangeAreCatalogued: function(){
-    console.log('all items are catalogued?',this.getAllUnknownItemsInRange().length,this.getAllItemsInRange().length )
     return this.getAllUnknownItemsInRange().length == 0 || this.getAllItemsInRange().length == 0;
   },
   
   isItemInDictionary: function(item){
-    console.log("is item in dictionary?")
     return this._dictionary[item.getGenoma()] ? true : false;
   },
   
   addItemToDictionary: function(item){
-    console.log('adding')
     this._dictionary[item.getGenoma()] = this.nameItemByGenoma(item.getGenoma());  
   },
   
@@ -65,7 +62,6 @@ var Agent = Class.create({
     for (var genoma in this._dictionary){
      
       if (genomicSimilarity(genoma,itemGenoma) < this.similarityThreshold){
-        console.log("seems that both genoma look alike!", genoma, itemGenoma)
         return this._dictionary[genoma];
       }
     }

@@ -11,6 +11,9 @@
             "path": "lib/bootstrap/2.3.2/js/bootstrap.min.js"
         },
         {
+            "path": "lib/bootstrap-slider/js/bootstrap-slider.js"
+        },
+        {
             "path": "js/helper.js",
             "update": "delta"
         },
@@ -47,6 +50,10 @@
     "css": [
         {
             "path": "lib/bootstrap/2.3.2/css/bootstrap.min.css",
+            "update": "delta"
+        },
+        {
+            "path": "lib/bootstrap-slider/css/slider.css",
             "update": "delta"
         },
         {
