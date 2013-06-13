@@ -2,8 +2,8 @@ var SettlerBehavior = {
 
   name: 'Settler',
   range: 3,
-  criticism: 0.4,
-  karma: 0.2,
+  criticism: 0.2, // low values for faster convergence
+  karma: 0.2, // low values for faster convergence
   
   behave: function (agent) {
     if (!agent.thereAreUnknownItemsInRange()){
@@ -42,8 +42,9 @@ var SettlerBehavior = {
       // add criticism and karma
       chance = chance + otherAgent.getKarma() - thisAgent.getCriticism();
 
-      if (Math.random() >= chance) {
-        if (Math.random() <= thisAgent.getNeologismFactor()){
+      if (Math.random() < chance) {
+        // risk of mutation in transfer (neologism)
+        if (Math.random() < thisAgent.getNeologismFactor()){
           thisDic[i] = getRandomName(); 
         }
         else {
@@ -68,7 +69,7 @@ var SettlerBehavior = {
     
     var thisLanguage = thisAgent.getLanguage();
     var otherLanguage = otherAgent.getLanguage();
-    var language = Math.round(Math.random()*360);
+    var language = getRandomLanguage();
     
     if (objectsAreEqual(thisAgent.getDictionary(), otherAgent.getDictionary())){
       

@@ -4,7 +4,7 @@ var Simulation = Class.create({
     agents: {
       'settler': {
         'behavior': SettlerBehavior,
-        'num': 25
+        'num': 35 // funny fact: increase a little bit and there is a critical mass: many influences, it will take ages to converge
       },
       'barbarian': {
         //'behavior': BarbarianBehavior,
@@ -12,15 +12,15 @@ var Simulation = Class.create({
       },
       'item': {
         //'behavior': ItemBehavior,
-        'num': 50
+        'num': 40
       }
     },
 
     genomicLenght: 32,
-    speed: 50,                        // Ticks per second
+    speed: 50,             
     worldSize: 50,
     similarityThreshold: 0.25,
-    neologismFactor: 0.05,
+    neologismFactor: 0.0001, // very low, otherwise neologisms won't allow convergent
     
     console: '#console',
     map: '#map',
@@ -239,30 +239,30 @@ var Simulation = Class.create({
     this._clock++;
     this._$iterationField.text(this._clock);
     
-    // this._checkConvergence();
+    if (this._checkConvergence()){
+     
+      this._showSuccessMessage();
+    
+    }
   },
   
   _checkConvergence: function(){
-    convergence = true;
-    
     for (var index=0; index < this._agents.length-1; index++){
-      if (this._agents[index].getDictionary().toString() != this._agents[index+1].getDictionary().toString()) {
-        convergence = false;
-        break;
+      if (!objectsAreEqual(this._agents[index].getDictionary(),this._agents[index+1].getDictionary())){
+        return false;
       }      
     }
     
-    if (convergence){
-      this._showSuccessMessage();
-    }
+    return true;
   },
     
   _showSuccessMessage: function() {
-    this._console.success('The simulation has converged in ' + this._clock + ' iterations. <a id="launchBarbarianHorde" href="#">Launch a Barbarian Horde!</a>');
-
-    $("#launchBarbarianHorde").click($.proxy(function () {
+    this._console.success('The simulation has converged in <strong><em>' + this._clock + '</em></strong> iterations!');
+    
+    
+    /*$("#launchBarbarianHorde").click($.proxy(function () {
       this.launchBarbarianHorde();
-    },this));
+    },this));*/
   },
   
   _clearMessage: function(){
