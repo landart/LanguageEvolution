@@ -6,17 +6,13 @@ var Item = Class.create({
   _$cell: null,
   _state: null,
 
-  
-  _lastName: '',
-  _lastAgent: null,
-  _genoma: '101001', // 6 bit, 101001 = type item
+  _genoma: '',
 
 
-  init: function (state) {
+  init: function (state,genomicLength) {
     this._state = state;
-    //this._genoma += pad(new Number(index).toString(2),6); // and 6 bit, random
+    this._genoma += getRandomGenoma(genomicLength);
   },
-
 
   getCoordinates: function (){
     return this._coordinates;
@@ -27,34 +23,16 @@ var Item = Class.create({
       this._$cell.css({ 'background-color': 'white' });
     }
     this._coordinates = coordinates || null;
-    this._$cell = this._state.map.cellAtCoordinates(coordinates);
+    this._$cell = this._state.map.getJQueryCellAtCoordinates(coordinates);
     this._$cell.css({ 'background-color': 'green' });
   },
-
-
   
   getIndex: function(){
     return this._index;
   },
   
-  getLastName: function(){
-    return this._lastName;
-  },
-  
-  setLastName: function(name){
-    this._lastName = name || this._lastName;    
-  },
-  
-  setLastAgent: function(agent){
-    this._lastAgent = agent || this._lastAgent;
-  },
-  
-  getLastAgent: function(){
-    return this._lastAgent; 
-  },
-    
-  toString: function(){
-    var name = this._lastName || 'I'+this._index;
-    return '<span class="item">'+name+'</span>';
+  getGenoma: function(){
+    return this._genoma;
   }
+    
 }); 

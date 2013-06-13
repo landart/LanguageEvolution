@@ -5,16 +5,16 @@ var Agent = Class.create({
 
   _state: null,
   _coordinates: null,
-  _$cell: null,
-  
-  _index: 0,    
-  _genoma: '110000', // 6 bit, 110000 = general agent
-  
+  _$cell: null,  
+  _index: 0,      
   _dictionary: null,  
+  
+  similarityThreshold: 0.25,
 
   init: function (behavior, state) {
     this.behavior = behavior;
     this._state = state;
+    this._dictionary = {};
   },
 
   tick: function () {
@@ -27,17 +27,12 @@ var Agent = Class.create({
       this._$cell.css({ 'background-color': 'white' });
     }
     this._coordinates = coordinates || null;
-    this._$cell = this._state.map.cellAtCoordinates(coordinates);
+    this._$cell = this._state.map.getJQueryCellAtCoordinates(coordinates);
   },
   
   getCoordinates: function() {
     return this._coordinates;
-  },
-  
-  _addRandomGene: function(index) {
-    this._genoma += pad(new Number(index).toString(2),6);
-  },  
-   
+  },   
   
   getDictionary: function(){
     return this._dictionary;
@@ -52,17 +47,51 @@ var Agent = Class.create({
   },
   
   allItemsInRangeAreCatalogued: function(){
-   
-    var elements = this._state.map.elementsAround(this.getCoordinates(),this.behavior.range);
+    console.log('all items are catalogued?',this.getAllUnknownItemsInRange().length,this.getAllItemsInRange().length )
+    return this.getAllUnknownItemsInRange().length == 0 || this.getAllItemsInRange().length == 0;
+  },
+  
+  isItemInDictionary: function(item){
+    console.log("is item in dictionary?")
+    return this._dictionary[item.getGenoma()] ? true : false;
+  },
+  
+  addItemToDictionary: function(item){
+    console.log('adding')
+    this._dictionary[item.getGenoma()] = this.nameItemByGenoma(item.getGenoma());  
+  },
+  
+  nameItemByGenoma: function(itemGenoma){
+    for (var genoma in this._dictionary){
+     
+      if (genomicSimilarity(genoma,itemGenoma) < this.similarityThreshold){
+        console.log("seems that both genoma look alike!", genoma, itemGenoma)
+        return this._dictionary[genoma];
+      }
+    }
+    return getRandomName();
+  },
+  
+  getAllItemsInRange: function(){
+    var elements = this._state.map.elementsAround(this.getCoordinates(),this.behavior.range);    
+    return filterElementsByClassName(elements,'Item');
+  },
+  
+  getAllUnknownItemsInRange: function(){
+    var items = this.getAllItemsInRange();
     
-    items = filterElementsByClassName(elements,'Item');
-    
+    var results = [];    
     for (var i in items){
-      if (!this._dictionary[elements[i].getIndex()]){
-        return false;
+      if (!this._dictionary[items[i].getGenoma()]){
+        results.push(items[i])
       }
     }
     
-    return true;
+    return results;
+  },
+  
+  getRandomUnknownItemInRange: function(){
+    var items = this.getAllUnknownItemsInRange();
+    return items[Math.floor(Math.random()*items.length)];   
   }
 }); 

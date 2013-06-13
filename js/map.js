@@ -70,28 +70,46 @@ var Map = Class.create({
   },
 
   updateAtCoordinates: function (coordinates, element) {
-    this._cells[coordinates.y * this.options.size + coordinates.x].element = element;
+    this.getCellAtCoordinates(coordinates).element = element;
   },
 
   isCoordinatesEmpty: function (coordinates) {
-    return this._cells[coordinates.y * this.options.size + coordinates.x].element === null;
+    return this.getCellAtCoordinates(coordinates).element === null;
   },
-
-  freeCoordinatesAround: function (coordinates, range) {    
+  
+  getCellAtCoordinates: function(coordinates) {
+    return this._cells[coordinates.y * this.options.size + coordinates.x]
+  },
+  
+  getJQueryCellAtCoordinates: function (coordinates) {
+    return $(this.getCellAtCoordinates(coordinates));
+  },
+  
+  getCellsAround: function(coordinates, range){
     range = range || 1;
 
     var xBounds = this._bounds(coordinates.x, range),
         yBounds = this._bounds(coordinates.y, range),
-        freeCoordinates = [],
-        localCoordinates;
+        cells = [];
     
     for (var x = xBounds.min; x <= xBounds.max; x++) {
       for (var y = yBounds.min; y <= yBounds.max; y++) {    
         if (x === coordinates.x && y === coordinates.y) continue;
-        localCoordinates = { x:x, y:y };
-        if (this.isCoordinatesEmpty(localCoordinates)) {
-          freeCoordinates.push(localCoordinates);
-        }
+        cells.push(this.getCellAtCoordinates({x:x,y:y}));
+      }
+    }
+    
+    return cells;
+  },
+
+  freeCoordinatesAround: function (coordinates, range) {    
+    
+    var cells = this.getCellsAround(coordinates, range);
+    var freeCoordinates = [];
+    
+    for (var i in cells){
+      if (this.isCoordinatesEmpty(cells[i].coordinates)){
+        freeCoordinates.push(cells[i].coordinates);
       }
     }
 
@@ -102,33 +120,22 @@ var Map = Class.create({
     return coordinates;
   },
 
-  elementAtCoordinates: function (coordinates) {
-    return this._cells[coordinates.y * this.options.size + coordinates.x].element;
-  },
-
   elementsAround: function (coordinates, range) {
-    range = range || 1;
-
-    var xBounds = this._bounds(coordinates.x, range),
-        yBounds = this._bounds(coordinates.y, range),
-        elements = [],
-        element;
-
-    for (var x = xBounds.min; x <= xBounds.max; x++) {
-      for (var y = yBounds.min; y <= yBounds.max; y++) {    
-        if (x === coordinates.x && y === coordinates.y) continue; 
-        element = this.elementAtCoordinates(coordinates);
-        if (element) {
-          elements.push(element);
-        }
+    var elements = [];
+    var cells = this.getCellsAround(coordinates, range);
+    
+    for (var i in cells){
+      var element = this.elementAtCoordinates(cells[i].coordinates);
+      if (element) {
+        elements.push(element);
       }
     }
 
     return elements;
   },
   
-  cellAtCoordinates: function (coordinates) {
-    return $(this._cells[coordinates.y * this.options.size + coordinates.x]);
-  },
+  elementAtCoordinates: function (coordinates) {
+    return this._cells[coordinates.y * this.options.size + coordinates.x].element;
+  }
 
 });

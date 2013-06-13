@@ -8,16 +8,23 @@ var SettlerBehavior = {
   behave: function (agent) {
     if (agent.allItemsInRangeAreCatalogued()){
       agent.randomMove();
-    }    
-  },
-
-  whenMeetAgent: function (agent) {
+    }
+    else {
+      var item = agent.getRandomUnknownItemInRange();
+      
+      if (!agent.isItemInDictionary(item)){
+        agent.addItemToDictionary(item);
+      }
+    }
+  }
+  
+  /*whenMeetAgent: function (agent) {
     agent.corrupt(0.1);
     agent.kill(0.1);
   },
 
   whenFindItem: function (item) {
     item.learn();
-  }
-
+  },*/
+  
 };

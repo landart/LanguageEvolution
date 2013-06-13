@@ -4,7 +4,7 @@ var Simulation = Class.create({
     agents: {
       'settler': {
         'behavior': SettlerBehavior,
-        'num': 4
+        'num': 5
       },
       'barbarian': {
         //'behavior': BarbarianBehavior,
@@ -12,12 +12,12 @@ var Simulation = Class.create({
       },
       'item': {
         //'behavior': ItemBehavior,
-        'num': 10
+        'num': 20
       }
     },
 
+    genomicLenght: 32,
     speed: 50,                        // Ticks per second
-
     worldSize: 40,
     console: '#console',
     map: '#map',
@@ -119,7 +119,7 @@ var Simulation = Class.create({
     var item;
 
     for (var i =0; i < this.options.agents.item.num; i++){
-      item = new Item(this.getState());
+      item = new Item(this.getState(),this.options.genomicLenght);
       this._items[i] = item;
       this._map.placeAtRandomCoordinates(item);
     }

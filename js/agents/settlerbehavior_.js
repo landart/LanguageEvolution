@@ -1,28 +1,7 @@
 /*var SettlerBehavior = Class.create(Behavior.prototype,{
 
   getAction: function(){
-    var agents = this._state.agents;
-    var agent = this._state.agent;
-    var items = this._state.items;
-    var allItemsCatalogued = this._state.allItemsCatalogued;
-    var dictionary = this._state.dictionary;
-    
-    // otherwise, if there are non catalogued items
-    if (!allItemsCatalogued){
 
-      var item = items[Math.floor(Math.random(0)*items.length)]; 
-        
-      if (!dictionary[item.getIndex()]){
-        this._addItemToDictionary(item);
-      }
-    }
-    // besides, if there is any agent, exchange knowledge
-    if (agents.length){
-      this._mixDictionaries();
-    }
-      
-    // move anyway so that discovery is fostered
-    this._moveAgent();
     
   },
   
@@ -75,21 +54,6 @@
     }
   },
   
-  _addItemToDictionary: function(item){
-    var dictionary = this._state.dictionary;
-    
-    // if item was not named
-    // or named by another agent (20%)
-    var conditions = !item.getLastName() || 
-                      item.getLastAgent()!=this._state.agent && Math.random()<0.2
-    
-    if (conditions){
-      var name = this._getRandomName();
-    
-      dictionary[item.getIndex()] = name;
-      item.setLastName(name);
-      item.setLastAgent(this);
-    }   
-  }  
+
   
 });*/
