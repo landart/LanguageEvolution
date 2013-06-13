@@ -43,6 +43,14 @@ var Item = Class.create({
   
   getGenoma: function(){
     return this._genoma;
+  },
+
+  $getArtefact: function () {
+    return this._$artefact;
+  },
+
+  $getCell: function () {
+    return this._$cell;
   }
     
 }); 

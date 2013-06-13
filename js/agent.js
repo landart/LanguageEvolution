@@ -25,12 +25,31 @@ var Agent = Class.create({
     this._state = state;
     this._dictionary = {};
     this._$artefact = $(document.createElement('div'))
-      .css({ 'background-color': 'red' })
-      .click($.proxy(this._onClick, this));
+      .css({ 'background-color': 'red' });
   },
 
-  _onClick: function () {
-    
+  userInteraction: function () {
+    var allItems = this._state.items,
+        item;
+
+    for (var i in allItems) {
+      allItems[i].$getCell().tooltip('destroy');
+    }
+
+    for (var dictionaryGenoma in this._dictionary) {
+      for (var i in allItems) {
+        var item = allItems[i];
+        if (genomicSimilarity(dictionaryGenoma, item.getGenoma()) < this.similarityThreshold) {
+          item.$getCell()
+            .tooltip({
+              container: 'body',
+              title: this._dictionary[item.getGenoma()],
+              trigger: 'manual' })
+            .tooltip('show');
+          break;
+        }
+      }
+    }
   },
 
   tick: function () {

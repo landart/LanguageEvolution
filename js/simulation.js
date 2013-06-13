@@ -21,11 +21,11 @@ var Simulation = Class.create({
     worldSize: 50,
     console: '#console',
     map: '#map',
-    dictionaries: '#dictionaries',
     actionReset: '#action-reset',
     actionPlay: '#action-play',
     actionPause: '#action-pause',
     speedSlider: '#speed-slider',
+    iterationField: '#iterationField',
   },
 
   // inner attributes
@@ -38,6 +38,7 @@ var Simulation = Class.create({
   _console: null,
   _map: null,
   _$speedSlider: null,
+  _$iterationField: null,
 
   // constructor
   init: function () {
@@ -85,6 +86,7 @@ var Simulation = Class.create({
 
     this._$map = $(this.options.map);
     this._$speedSlider = $(this.options.speedSlider);
+    this._$iterationField = $(this.options.iterationField);
 
     $(this.options.actionReset)
       .click($.proxy(this._onReset, this))
@@ -232,6 +234,7 @@ var Simulation = Class.create({
     }
     
     this._clock++;
+    this._$iterationField.text(this._clock);
     
     // this._checkConvergence();
   },

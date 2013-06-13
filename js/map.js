@@ -10,9 +10,18 @@ var Map = Class.create({
 
 
   init: function (target, options) {
+    var that = this;
+
     this._$target = $(target);
     this.options = jQuery.extend(this.default, options || {});
+
     this._buildStructure();
+
+    this._$target.on('click', 'td', function () {
+      if (this.element && this.element.userInteraction) {
+        this.element.userInteraction();
+      }
+    });
   },
 
 
