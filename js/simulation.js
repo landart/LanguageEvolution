@@ -155,9 +155,16 @@ var Simulation = Class.create({
   },
   
   reset: function () {
-    this._clock = 0;
     this._clearMessage();
     this.stop();
+    this._clearCanvas();
+    this._clearInnerData();    
+    
+    this._speed = this.options.speed;
+
+    this._initItems();
+    this._initAgents();
+    
     this.play();
   },
 
@@ -176,6 +183,33 @@ var Simulation = Class.create({
   pause: function () {
     this._removeInterval();
     this._running = false;
+  },
+  
+  _clearInnerData: function(){
+    for (var i in this._items){
+      this._items[i] = null;
+    }
+    
+    for (var i in this._agents){
+      this._agents[i] = null;
+    }
+    
+    this._agents = [];   
+    this._items = [];  
+    this._timeoutHandle = null;
+    this._running = false;
+    this._clock = 0;
+    this._speed = 0;
+  },
+  
+  _clearCanvas: function() {
+    for (var i in this._items){
+      this._items[i]._$cell.html("");
+    }
+    
+    for (var i in this._agents){
+      this._agents[i]._$cell.html("");
+    }
   },
   
   _setupInterval: function () {
