@@ -1,7 +1,10 @@
 var Agent = Class.create({
   className: 'Agent', 
 
-  behavior: null,
+  _behavior: null,
+  _karma: 0,
+  _criticism: 0,
+  _range: 1,
 
   _state: null,
   _coordinates: null,
@@ -12,14 +15,47 @@ var Agent = Class.create({
   similarityThreshold: 0.25,
 
   init: function (behavior, state) {
-    this.behavior = behavior;
+    this._behavior = behavior;
+    this._karma = behavior.karma || 0;
+    this._criticism = behavior.criticism || 0;
+    this._range = behavior.range || 1;
+    
     this._state = state;
     this._dictionary = {};
   },
 
   tick: function () {
-    this.behavior.behave(this);
+    // basic behavior
+    this._behavior.behave(this);
+    
+    this._processEvents();
+    
     this._$cell.css({ 'background-color': 'red' });
+  },
+  
+  _processEvents: function(){
+    
+    // find unknown item
+    if (this.thereAreUnknownItemsInRange()){ 
+      if (typeof this._behavior.whenFindItem == "function"){
+        var items = this.getAllUnknownItemsInRange();
+        for (var i in items){
+          this._behavior.whenFindItem(this,items[i]);
+        }
+      } 
+    }
+    
+    // meet other agents
+    if (this.thereAreAgentsInRange()){
+      if (typeof this._behavior.whenMeetAgent == "function"){
+        var agents = this.getAllAgentsInRange();
+        for (var i in agents){
+          this._behavior.whenMeetAgent(this,agents[i]);  
+        }        
+      } 
+    }
+    
+    
   },
 
   setCoordinates: function (coordinates) {
@@ -46,18 +82,11 @@ var Agent = Class.create({
     this.setCoordinates(newCoordinates);
   },
   
-  allItemsInRangeAreCatalogued: function(){
-    console.log('all items are catalogued?',this.getAllUnknownItemsInRange().length,this.getAllItemsInRange().length )
-    return this.getAllUnknownItemsInRange().length == 0 || this.getAllItemsInRange().length == 0;
-  },
-  
   isItemInDictionary: function(item){
-    console.log("is item in dictionary?")
     return this._dictionary[item.getGenoma()] ? true : false;
   },
   
   addItemToDictionary: function(item){
-    console.log('adding')
     this._dictionary[item.getGenoma()] = this.nameItemByGenoma(item.getGenoma());  
   },
   
@@ -73,7 +102,7 @@ var Agent = Class.create({
   },
   
   getAllItemsInRange: function(){
-    var elements = this._state.map.elementsAround(this.getCoordinates(),this.behavior.range);    
+    var elements = this._state.map.elementsAround(this.getCoordinates(),this._range);    
     return filterElementsByClassName(elements,'Item');
   },
   
@@ -89,9 +118,66 @@ var Agent = Class.create({
     
     return results;
   },
+
+  getAllAgentsInRange: function(){
+    var elements = this._state.map.elementsAround(this.getCoordinates(),this._range);    
+    return filterElementsByClassName(elements,'Agent');
+  },
+  
+  thereAreUnknownItemsInRange: function(){
+    return this.getAllUnknownItemsInRange().length != 0;
+  },
+  
+  thereAreAgentsInRange: function(){    
+    return this.getAllAgentsInRange().length != 0;
+  },
   
   getRandomUnknownItemInRange: function(){
     var items = this.getAllUnknownItemsInRange();
-    return items[Math.floor(Math.random()*items.length)];   
+    
+    if (items.length){
+      return items[Math.floor(Math.random()*items.length)];  
+    }
+    
+    return null;       
+  },
+  
+  getCriticism: function(){
+    return this._criticism;
+  },
+  
+  getKarma: function(){
+    return this._karma;
+  },
+  
+  increaseCriticism: function(){
+    this._increaseValue("_criticism");
+  },
+  
+  decreaseCriticism: function(){
+    this._decreaseValue("_criticism");
+  },
+  
+  increaseKarma: function(){
+    this._increaseValue("_karma");
+  },
+  
+  decreaseKarma: function(){
+    this._decreaseValue("_karma");
+  },
+  
+  _increaseValue: function(index){
+    this[index] += 0.01;
+    if (this[index] > 1){
+      this[index] = 1;
+    }
+  },
+  
+  _decreaseValue: function(index){
+    this[index] -= 0.01;
+    if (this[index] < 0.01){
+      this[index] = 0.01;
+    }
   }
+  
 }); 
