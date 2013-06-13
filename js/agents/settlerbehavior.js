@@ -6,6 +6,9 @@ var SettlerBehavior = {
   karma: 0.2,
   
   behave: function (agent) {
+
+    console.log(agent)
+
     if (!agent.thereAreUnknownItemsInRange()){
       agent.randomMove();
     }
