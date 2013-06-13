@@ -18,7 +18,6 @@ var SettlerBehavior = {
   },
   
   whenMeetAgent: function (thisAgent, otherAgent) {   
-    console.log("I've met an agent", thisAgent, otherAgent)
       
     thisDic = thisAgent.getDictionary();
     otherDic = otherAgent.getDictionary();
@@ -50,12 +49,26 @@ var SettlerBehavior = {
           // one gains, the other looses
           thisAgent.increaseCriticism();
           otherAgent.decreaseKarma();
-        }
-        
-        console.warn("Own criticism and foreigner karma updated: ", thisAgent.getCriticism(), otherAgent.getKarma());
-        
+        }        
       }
 
+      this.checkIfWeAreTheSame(thisAgent, otherAgent);
+
+  },
+  
+  
+  
+  checkIfWeAreTheSame: function(thisAgent, otherAgent){
+    thisKeys = keys(thisAgent.dictionary);
+    otherKeys = keys(otherAgent.dictionary);
+    
+    if (thisKeys.length != otherKeys.length ){
+      return false;
+    }
+    
+    if (!thisKeys.equals(otherKeys)){
+      return false;
+    }
   }
 
   

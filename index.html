@@ -10,18 +10,21 @@
 <body>
 
   <a href="https://github.com/landart/LanguageEvolution">
-    <img style="position: absolute; top: 0; right: 0; border: 0; z-index: 9999" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub">
+    <img style="position: fixed; top: 0; right: 0; border: 0; z-index: 9999" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub">
   </a>
 
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
-      <div class="container-fluid">
+      <div class="container">
         <a class="brand" href="#">Language Evolution</a>
         <ul class="nav">
           <li class="divider-vertical"></li>
           <li><a id="action-reset" class="clickable"><i class="icon-repeat icon-white"></i></a></li>
           <li id="action-play" class="clickable"><a><i class="icon-play icon-white"></i></a></li>
           <li id="action-pause" class="clickable"><a><i class="icon-pause icon-white"></i></a></li>
+        </ul>
+        <ul class="nav pull-right">
+          <li class="navbar-text"><div id="speed-slider"></div></li>
         </ul>
       </div>
     </div>
@@ -35,16 +38,13 @@
 
         <table id="map">
         </table>
-
-        <table id="dictionaries">
-        </table>
       
     </div>
     <div id="push"></div>
   </div>
 
   <footer>
-    <div class="container-fluid">
+    <div class="container">
       <p class="muted credit">
         Language Evolution by
         <a href="http://ch.linkedin.com/in/jorgealbaladejo">Jorge Albaladejo</a>,

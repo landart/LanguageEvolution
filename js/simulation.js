@@ -25,20 +25,24 @@ var Simulation = Class.create({
     actionReset: '#action-reset',
     actionPlay: '#action-play',
     actionPause: '#action-pause',
+    speedSlider: '#speed-slider',
   },
 
   // inner attributes
   _agents: [],   
   _items: [],  
-  _runInterval: null,
+  _timeoutHandle: null,
   _running: false,
   _clock: 0,
+  _speed: 0,
   _console: null,
   _map: null,
-  _$dictionaries: null,
+  _$speedSlider: null,
 
   // constructor
   init: function () {
+    this._speed = this.options.speed;
+
     this._initGui();
     this._initMap();
     this._initItems();
@@ -58,6 +62,10 @@ var Simulation = Class.create({
     this.pause();
   },
 
+  _onSpeed: function (event) {
+    this._speed = this._$speedSlider.data('value');
+  },
+
   _keyHandler: function (event) {
     switch (event.keyCode) {
       case 80: // p
@@ -73,40 +81,25 @@ var Simulation = Class.create({
   },
 
   _initGui: function () {
+    var that = this;
+
     this._$map = $(this.options.map);
-    this._$dictionaries = $(this.options.dictionaries);
-    $(this.actionReset)
+    this._$speedSlider = $(this.options.speedSlider);
+
+    $(this.options.actionReset)
       .click($.proxy(this._onReset, this))
       .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Reset', content: 'Shortcut <kbd>R</kbd>', container: 'body' });
-    $(this.actionPlay)
+    $(this.options.actionPlay)
       .click($.proxy(this._onPlay, this))
       .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Play', content: 'Shortcut <kbd>P</kbd>', container: 'body' });
-    $(this.actionPause)
+    $(this.options.actionPause)
       .click($.proxy(this._onPause, this))
       .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Pause', content: 'Shortcut <kbd>S</kbd>', container: 'body' });
     $(window.document).bind('keyup', $.proxy(this._keyHandler, this));
-    this._buildGui();
-  },
 
-  _buildGui: function() {
-    this._buildDictionaries();
-  },
-
-  _buildDictionaries: function () {
-    var rows = this.options.agents.settler.num,
-        cells = this.options.agents.item.num,
-        table = this._$dictionaries,
-        body = $(document.createElement('tbody')),
-        row;
-
-    for (var i = 0; i < rows; i++) {
-      row = $(document.createElement('tr'));
-      for (var j = 0; j < cells; j++) {
-        row.append(document.createElement('td'));
-      }
-      body.append(row);
-    }
-    table.append(body);
+    this._$speedSlider
+      .slider({ min: 1, max: 1000, value: this._speed })
+      .on('slide', $.proxy(this._onSpeed, this))
   },
   
   _initMap: function (){
@@ -187,13 +180,16 @@ var Simulation = Class.create({
   
   _setupInterval: function () {
     var that = this;
-    this._runInterval = setInterval(function () {     
-      that.tick();
-    }, 1000/this.options.speed);
+    this._onTimeout();
+  },
+
+  _onTimeout: function () {
+    this.tick();
+    this._timeoutHandle = setTimeout($.proxy(this._onTimeout, this), this._speed);
   },
 
   _removeInterval: function () {
-    clearInterval(this._runInterval);
+    clearInterval(this._timeoutHandle);
   },
   
   tick: function() {
