@@ -8,6 +8,7 @@ var Agent = Class.create({
 
   _state: null,
   _coordinates: null,
+  _$artefact: null,
   _$cell: null,  
   _index: 0,      
   _dictionary: null,  
@@ -19,9 +20,15 @@ var Agent = Class.create({
     this._karma = behavior.karma || 0;
     this._criticism = behavior.criticism || 0;
     this._range = behavior.range || 1;
-    
     this._state = state;
     this._dictionary = {};
+    this._$artefact = $(document.createElement('div'))
+      .css({ 'background-color': 'red' })
+      .click($.proxy(this._onClick, this));
+  },
+
+  _onClick: function () {
+    
   },
 
   tick: function () {
@@ -29,8 +36,6 @@ var Agent = Class.create({
     this._behavior.behave(this);
     
     this._processEvents();
-    
-    this._$cell.css({ 'background-color': 'red' });
   },
   
   _processEvents: function(){
@@ -60,10 +65,17 @@ var Agent = Class.create({
 
   setCoordinates: function (coordinates) {
     if (this._$cell) {
-      this._$cell.css({ 'background-color': 'white' });
+      this._state.map.updateAtCoordinates(this.getCoordinates(), null);
+      this._$artefact.remove();
     }
+
     this._coordinates = coordinates || null;
+    this._state.map.updateAtCoordinates(coordinates, this);
     this._$cell = this._state.map.getJQueryCellAtCoordinates(coordinates);
+    
+    if (this._$cell) {
+      this._$cell.append(this._$artefact);
+    }
   },
   
   getCoordinates: function() {
@@ -76,9 +88,6 @@ var Agent = Class.create({
   
   randomMove: function () {
     var newCoordinates = this._state.map.freeCoordinatesAround(this.getCoordinates());
-
-    this._state.map.updateAtCoordinates(this.getCoordinates(), null);
-    this._state.map.updateAtCoordinates(newCoordinates, this);
     this.setCoordinates(newCoordinates);
   },
   
