@@ -19,13 +19,16 @@ var Simulation = Class.create({
     genomicLenght: 32,
     speed: 50,                        // Ticks per second
     worldSize: 50,
+    similarityThreshold: 0.25,
+    neologismFactor: 0.2,
+    
     console: '#console',
     map: '#map',
     actionReset: '#action-reset',
     actionPlay: '#action-play',
     actionPause: '#action-pause',
     speedSlider: '#speed-slider',
-    iterationField: '#iterationField',
+    iterationField: '#iterationField'    
   },
 
   // inner attributes
@@ -124,7 +127,7 @@ var Simulation = Class.create({
     var agent;
 
     for (var i = 0; i < this.options.agents.settler.num; i++) {
-      agent = new Agent(this.options.agents.settler.behavior, this.getState());
+      agent = new Agent(this.options.agents.settler.behavior, this.getState(), this.options);
       this._agents.push(agent);
       this._map.placeAtRandomCoordinates(agent);
     }

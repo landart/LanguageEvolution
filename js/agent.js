@@ -15,17 +15,17 @@ var Agent = Class.create({
   
   _language: 0,
   
-  similarityThreshold: 0.25,
+  _options: null,
 
-  init: function (behavior, state) {
-    this._behavior = behavior;
+  init: function (behavior, state, options) {
+    this._options = options || null;
+    this._behavior = behavior || null;
     this._karma = behavior.karma || 0;
     this._criticism = behavior.criticism || 0;
     this._range = behavior.range || 1;
-    this._state = state;
+    this._state = state || null;
     this._dictionary = {};
-    this._$artefact = $(document.createElement('div'))
-      .css({ 'background-color': 'red' });
+    this._$artefact = $(document.createElement('div')).css({ 'background-color': 'red' });    
   },
 
   userInteraction: function () {
@@ -39,7 +39,7 @@ var Agent = Class.create({
     for (var dictionaryGenoma in this._dictionary) {
       for (var i in allItems) {
         var item = allItems[i];
-        if (genomicSimilarity(dictionaryGenoma, item.getGenoma()) < this.similarityThreshold) {
+        if (genomicSimilarity(dictionaryGenoma, item.getGenoma()) < this._options.similarityThreshold) {
           item.$getCell()
             .tooltip({
               container: 'body',
@@ -122,7 +122,7 @@ var Agent = Class.create({
   
   nameItemByGenoma: function(itemGenoma){
     for (var genoma in this._dictionary){     
-      if (genomicSimilarity(genoma,itemGenoma) < this.similarityThreshold){
+      if (genomicSimilarity(genoma,itemGenoma) < this._options.similarityThreshold){
         return this._dictionary[genoma];
       }
     }
@@ -215,6 +215,10 @@ var Agent = Class.create({
   setLanguage: function(language){
     this.language = language;
     this._$artefact.css("background","hsl("+language+",75%,25%)");
+  },
+  
+  getNeologismFactor: function(){
+    return this._options.neologismFactor;
   }
   
 }); 
