@@ -6,25 +6,57 @@ var SettlerBehavior = {
   karma: 0.2,
   
   behave: function (agent) {
-    if (agent.allItemsInRangeAreCatalogued()){
+    if (!agent.thereAreUnknownItemsInRange()){
       agent.randomMove();
     }
-    else {
-      var item = agent.getRandomUnknownItemInRange();
-      
-      if (!agent.isItemInDictionary(item)){
-        agent.addItemToDictionary(item);
-      }
-    }
-  }
-  
-  /*whenMeetAgent: function (agent) {
-    agent.corrupt(0.1);
-    agent.kill(0.1);
   },
+  
+  whenFindItem: function (agent, item) {
+    if (!agent.isItemInDictionary(item)){
+      agent.addItemToDictionary(item);
+    }
+  },
+  
+  whenMeetAgent: function (thisAgent, otherAgent) {   
+    console.log("I've met an agent", thisAgent, otherAgent)
+      
+    thisDic = thisAgent.getDictionary();
+    otherDic = otherAgent.getDictionary();
+  
+    for (var i in otherDic){
+        var chance = 0;
+        
+        // case 1: this agent does not know, foreigner does
+        if ( !thisDic[i] && otherDic[i] ){
+          chance = 1;
+        }
+        
+        // case 2: both agents know
+        if ( thisDic[i] && otherDic[i] ){
+          chance = 0.5;
+        }
+        
+        // add criticism and karma
+        chance = chance + otherAgent.getKarma() - thisAgent.getCriticism();
+        
+        if (Math.random() >= chance){
+          thisDic[i] = otherDic[i];
+          
+          // adjust karma and criticism values
+          thisAgent.decreaseCriticism();
+          otherAgent.increaseKarma();
+        }
+        else {
+          // one gains, the other looses
+          thisAgent.increaseCriticism();
+          otherAgent.decreaseKarma();
+        }
+        
+        console.warn("Own criticism and foreigner karma updated: ", thisAgent.getCriticism(), otherAgent.getKarma());
+        
+      }
 
-  whenFindItem: function (item) {
-    item.learn();
-  },*/
+  }
+
   
 };
