@@ -12,6 +12,8 @@ var Agent = Class.create({
   _index: 0,      
   _dictionary: null,  
   
+  _language: 0,
+  
   similarityThreshold: 0.25,
 
   init: function (behavior, state) {
@@ -178,6 +180,16 @@ var Agent = Class.create({
     if (this[index] < 0.01){
       this[index] = 0.01;
     }
+  },
+  
+  getLanguage: function(){
+    return this.language;
+  },
+  
+  setLanguage: function(language){
+    this.language = language;
+    
+    this._$cell.html(language);
   }
   
 }); 

@@ -4,7 +4,7 @@ var Simulation = Class.create({
     agents: {
       'settler': {
         'behavior': SettlerBehavior,
-        'num': 5
+        'num': 2
       },
       'barbarian': {
         //'behavior': BarbarianBehavior,
@@ -12,13 +12,13 @@ var Simulation = Class.create({
       },
       'item': {
         //'behavior': ItemBehavior,
-        'num': 20
+        'num': 5
       }
     },
 
     genomicLenght: 32,
     speed: 50,                        // Ticks per second
-    worldSize: 40,
+    worldSize: 10,
     console: '#console',
     map: '#map',
     dictionaries: '#dictionaries',

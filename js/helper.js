@@ -48,14 +48,18 @@ function getRandomName(){
   return options[Math.floor(Math.random()*options.length)];
 }
 
-$.fn.equals = function(compareTo) {
-  if (!compareTo || this.length != compareTo.length) {
-    return false;
-  }
-  for (var i = 0; i < this.length; ++i) {
-    if (this[i] !== compareTo[i]) {
-      return false;
+function objectsAreEqual(object1, object2){
+    for (var i in object1){
+      if (object1[i] != object2[i]){
+        return false;
+      }
     }
-  }
-  return true;
-};
+    
+    for (var i in object2){
+      if (object1[i] != object2[i]){
+        return false;
+      }
+    }
+    
+    return true;
+}

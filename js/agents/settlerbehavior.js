@@ -52,24 +52,31 @@ var SettlerBehavior = {
         }        
       }
 
-      this.checkIfWeAreTheSame(thisAgent, otherAgent);
+      this.checkIfWeSpeakTheSame(thisAgent, otherAgent);
 
   },
   
   
-  checkIfWeAreTheSame: function(thisAgent, otherAgent){
-    /*thisKeys = keys(thisAgent.dictionary);
-    otherKeys = keys(otherAgent.dictionary);
+  checkIfWeSpeakTheSame: function(thisAgent, otherAgent){
     
-    if (thisKeys.length != otherKeys.length ){
-      return false;
+    if (objectsAreEqual(thisAgent.getDictionary(), otherAgent.getDictionary())){
+      
+      var thisLanguage = thisAgent.getLanguage();
+      var otherLanguage = otherAgent.getLanguage();
+      var language = Math.round(Math.random()*100);
+      
+      if (!thisLanguage && otherLanguage){
+        language = otherLanguage;    
+      } 
+      else if (!otherLanguage && thisLanguage){
+        language = thisLanguage;
+      }  
+
+      thisAgent.setLanguage(language);
+      otherAgent.setLanguage(language)
+
     }
-    
-    if (!thisKeys.equals(otherKeys)){
-      return false;
-    }*/
-    
-    
+        
   }
 
   
