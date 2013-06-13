@@ -75,13 +75,13 @@ var Simulation = Class.create({
   _initGui: function () {
     this._$map = $(this.options.map);
     this._$dictionaries = $(this.options.dictionaries);
-    $(this.actionReset)
+    $(this.options.actionReset)
       .click($.proxy(this._onReset, this))
       .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Reset', content: 'Shortcut <kbd>R</kbd>', container: 'body' });
-    $(this.actionPlay)
+    $(this.options.actionPlay)
       .click($.proxy(this._onPlay, this))
       .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Play', content: 'Shortcut <kbd>P</kbd>', container: 'body' });
-    $(this.actionPause)
+    $(this.options.actionPause)
       .click($.proxy(this._onPause, this))
       .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Pause', content: 'Shortcut <kbd>S</kbd>', container: 'body' });
     $(window.document).bind('keyup', $.proxy(this._keyHandler, this));
