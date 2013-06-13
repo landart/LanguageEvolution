@@ -102,10 +102,8 @@ var Agent = Class.create({
   },
   
   nameItemByGenoma: function(itemGenoma){
-    for (var genoma in this._dictionary){
-     
+    for (var genoma in this._dictionary){     
       if (genomicSimilarity(genoma,itemGenoma) < this.similarityThreshold){
-        console.log("seems that both genoma look alike!", genoma, itemGenoma)
         return this._dictionary[genoma];
       }
     }
@@ -197,8 +195,7 @@ var Agent = Class.create({
   
   setLanguage: function(language){
     this.language = language;
-    
-    this._$cell.html(language);
+    this._$artefact.css("background","hsl("+language+",50%,50%)");
   }
   
 }); 

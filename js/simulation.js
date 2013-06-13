@@ -4,7 +4,7 @@ var Simulation = Class.create({
     agents: {
       'settler': {
         'behavior': SettlerBehavior,
-        'num': 2
+        'num': 25
       },
       'barbarian': {
         //'behavior': BarbarianBehavior,
@@ -12,13 +12,13 @@ var Simulation = Class.create({
       },
       'item': {
         //'behavior': ItemBehavior,
-        'num': 5
+        'num': 50
       }
     },
 
     genomicLenght: 32,
     speed: 50,                        // Ticks per second
-    worldSize: 10,
+    worldSize: 50,
     console: '#console',
     map: '#map',
     dictionaries: '#dictionaries',
@@ -63,7 +63,7 @@ var Simulation = Class.create({
   },
 
   _onSpeed: function (event) {
-    this._speed = this._$speedSlider.data('value');
+    this._speed = this._$speedSlider.data('value') || this._speed;
   },
 
   _keyHandler: function (event) {
@@ -98,7 +98,7 @@ var Simulation = Class.create({
     $(window.document).bind('keyup', $.proxy(this._keyHandler, this));
 
     this._$speedSlider
-      .slider({ min: 1, max: 1000, value: this._speed })
+      .slider({ min: 1, max: 100, value: this._speed || 1 })
       .on('slide', $.proxy(this._onSpeed, this))
   },
   
@@ -185,7 +185,7 @@ var Simulation = Class.create({
 
   _onTimeout: function () {
     this.tick();
-    this._timeoutHandle = setTimeout($.proxy(this._onTimeout, this), this._speed);
+    this._timeoutHandle = setTimeout($.proxy(this._onTimeout, this), Math.round(1000/this._speed));
   },
 
   _removeInterval: function () {

@@ -6,9 +6,6 @@ var SettlerBehavior = {
   karma: 0.2,
   
   behave: function (agent) {
-
-    console.log(agent)
-
     if (!agent.thereAreUnknownItemsInRange()){
       agent.randomMove();
     }
@@ -62,22 +59,31 @@ var SettlerBehavior = {
   
   checkIfWeSpeakTheSame: function(thisAgent, otherAgent){
     
+    var thisLanguage = thisAgent.getLanguage();
+    var otherLanguage = otherAgent.getLanguage();
+    var language = Math.round(Math.random()*360);
+    
     if (objectsAreEqual(thisAgent.getDictionary(), otherAgent.getDictionary())){
       
-      var thisLanguage = thisAgent.getLanguage();
-      var otherLanguage = otherAgent.getLanguage();
-      var language = Math.round(Math.random()*100);
-      
+      // accept other's
       if (!thisLanguage && otherLanguage){
         language = otherLanguage;    
       } 
-      else if (!otherLanguage && thisLanguage){
+
+      // accept other's
+      else if (otherLanguage && thisLanguage){
         language = thisLanguage;
       }  
 
       thisAgent.setLanguage(language);
       otherAgent.setLanguage(language)
 
+    }
+    else {
+      // break equality since dictionaries are not equal and agents have a language assigned
+      if (thisLanguage == otherLanguage && thisLanguage){
+        thisAgent.setLanguage(language);
+      }
     }
         
   }
