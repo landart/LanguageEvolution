@@ -2,7 +2,7 @@ var SettlerBehavior = {
 
   name: 'Settler',
   range: 3,
-  criticism: 0.8,
+  criticism: 0.4,
   karma: 0.2,
   
   behave: function (agent) {

@@ -20,7 +20,7 @@ var Simulation = Class.create({
     speed: 50,                        // Ticks per second
     worldSize: 50,
     similarityThreshold: 0.25,
-    neologismFactor: 0.2,
+    neologismFactor: 0.05,
     
     console: '#console',
     map: '#map',
