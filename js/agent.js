@@ -195,7 +195,7 @@ var Agent = Class.create({
   },
   
   _increaseValue: function(index){
-    this[index] += 0.01;
+    this[index] += 0.02;
     if (this[index] > 1){
       this[index] = 1;
     }
@@ -214,7 +214,7 @@ var Agent = Class.create({
   
   setLanguage: function(language){
     this.language = language;
-    this._$artefact.css("background","hsl("+language+",50%,50%)");
+    this._$artefact.css("background","hsl("+language+",75%,25%)");
   }
   
 }); 
