@@ -78,10 +78,18 @@ var SettlerBehavior = {
         language = otherLanguage;    
       } 
 
-      // accept other's
-      else if (otherLanguage && thisLanguage){
+      // accept this one
+      else if (!otherLanguage && thisLanguage){
         language = thisLanguage;
       }  
+      
+      // it might be any of both
+      else if (thisLanguage && otherLanguage){
+        var factor = thisAgent.getKarma()*thisAgent.getCriticism()/otherAgent.getKarma()/otherAgent.getCriticism();
+        language = Math.random() < 0.5 * factor ? thisLanguage : otherLanguage;
+      }
+      
+      // if any of them has a language, then the random one
 
       thisAgent.setLanguage(language);
       otherAgent.setLanguage(language)
