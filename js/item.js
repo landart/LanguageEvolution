@@ -14,7 +14,7 @@ var Item = Class.create({
     this._state = state;
     this._genoma += getRandomGenoma(genomicLength);
     this._$artefact = $(document.createElement('div'))
-      .css({ 'background-color': 'green' })
+      .addClass("item-cell")
       .click($.proxy(this._onClick, this));
   },
 

@@ -118,3 +118,7 @@ span.barbarian{
 #dictionaries td{
   font-size: 80%;
 }
+
+.item-cell{
+  background-color: hsl(120,25%,80%);
+}
