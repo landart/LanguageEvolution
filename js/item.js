@@ -4,6 +4,7 @@ var Item = Class.create({
 
   _coordinates: null,
   _$cell: null,
+  _$artifact: null,
   _state: null,
 
   _genoma: '',
@@ -12,6 +13,9 @@ var Item = Class.create({
   init: function (state,genomicLength) {
     this._state = state;
     this._genoma += getRandomGenoma(genomicLength);
+    this._$artefact = $(document.createElement('div'))
+      .css({ 'background-color': 'green' })
+      .click($.proxy(this._onClick, this));
   },
 
   getCoordinates: function (){
@@ -20,11 +24,17 @@ var Item = Class.create({
   
   setCoordinates: function(coordinates) {
     if (this._$cell) {
-      this._$cell.css({ 'background-color': 'white' });
+      this._state.map.updateAtCoordinates(this.getCoordinates(), null);
+      this._$artefact.remove();
     }
+
     this._coordinates = coordinates || null;
+    this._state.map.updateAtCoordinates(coordinates, this);
     this._$cell = this._state.map.getJQueryCellAtCoordinates(coordinates);
-    this._$cell.css({ 'background-color': 'green' });
+    
+    if (this._$cell) {
+      this._$cell.append(this._$artefact);
+    }
   },
   
   getIndex: function(){
