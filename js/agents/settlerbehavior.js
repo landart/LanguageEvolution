@@ -57,9 +57,8 @@ var SettlerBehavior = {
   },
   
   
-  
   checkIfWeAreTheSame: function(thisAgent, otherAgent){
-    thisKeys = keys(thisAgent.dictionary);
+    /*thisKeys = keys(thisAgent.dictionary);
     otherKeys = keys(otherAgent.dictionary);
     
     if (thisKeys.length != otherKeys.length ){
@@ -68,7 +67,9 @@ var SettlerBehavior = {
     
     if (!thisKeys.equals(otherKeys)){
       return false;
-    }
+    }*/
+    
+    
   }
 
   
