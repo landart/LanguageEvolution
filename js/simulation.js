@@ -4,7 +4,9 @@ var Simulation = Class.create({
     agents: {
       'settler': {
         'behavior': SettlerBehavior,
-        'num': 35 // funny fact: increase a little bit and there is a critical mass: many influences, it will take ages to converge
+        // Funny fact: increase a little this value and there is a critical mass
+        // many influences, it will take ages to converge
+        'num': 35
       },
       'barbarian': {
         //'behavior': BarbarianBehavior,
@@ -31,28 +33,36 @@ var Simulation = Class.create({
     speedSlider: '#speed-slider',
     iterationField: '#iterationField',
     ipsField: '#ipsField',    
+    populationField: '#populationField',
 
     // The higher this value, the less the IPS will be affected by quick changes
     // Setting this to 1 will show you the IPS of the last sampled frame only
     // http://stackoverflow.com/questions/5078913/html5-canvas-performance-calculating-loops-frames-per-second
     ipsFilter: 10,
+
+    ipsRefreshRate: 1000, // ms
+    populationRefreshRate: 5000, // ms
   },
 
   // inner attributes
   _agents: [],   
   _items: [],  
-  _timeoutHandle: null,
+  _simulationTimeout: null,
+  _refreshPopulationInterval: null,
+  _refreshIpsInterval: null,
   _running: false,
   _clock: 0,
   _ips: 0,
   _lastUpdate: null,
   _speed: 0,
+  _lastPopulationCount: 0,
   _console: null,
   _map: null,
   _agentViewer: null,
   _$speedSlider: null,
   _$iterationField: null,
   _$ipsField: null,
+  _$populationField: null,
 
   // constructor
   init: function () {
@@ -102,18 +112,36 @@ var Simulation = Class.create({
     this._$speedSlider = $(this.options.speedSlider);
     this._$iterationField = $(this.options.iterationField);
     this._$ipsField = $(this.options.ipsField);
+    this._$populationField = $(this.options.populationField);
 
     this._$iterationField
       .tooltip({ placement: 'bottom', trigger: 'hover', title: 'Number of iterations' });
     this._$ipsField
       .tooltip({ placement: 'bottom', trigger: 'hover', title: 'Number of iteration computed by seconds' });
+    this._$populationField
+      .tooltip({
+        placement: 'bottom',
+        trigger: 'hover',
+        title: 'Current population and changes over last ' + this.options.populationRefreshRate / 1000 + ' seconds' });
 
     $(this.options.actionReset)
       .click($.proxy(this._onReset, this))
-      .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Reset', content: 'Shortcut <kbd>R</kbd>', container: 'body' });
+      .popover({
+        placement: 'bottom',
+        trigger: 'hover',
+        html: true,
+        title: 'Reset',
+        content: 'Shortcut <kbd>R</kbd>',
+        container: 'body' });
     $(this.options.actionPlay)
       .click($.proxy(this._onPlay, this))
-      .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Play', content: 'Shortcut <kbd>P</kbd>', container: 'body' });
+      .popover({
+        placement: 'bottom',
+        trigger: 'hover',
+        html: true,
+        title: 'Play',
+        content: 'Shortcut <kbd>P</kbd>',
+        container: 'body' });
     $(this.options.actionPause)
       .click($.proxy(this._onPause, this))
       .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Pause', content: 'Shortcut <kbd>S</kbd>', container: 'body' });
@@ -196,7 +224,7 @@ var Simulation = Class.create({
 
   play: function() {
     if (!this._running) {
-      this._setupInterval();
+      this._setupSimulationTiming();
       this._running = true;
     }
   },
@@ -207,7 +235,7 @@ var Simulation = Class.create({
   },
 
   pause: function () {
-    this._removeInterval();
+    this._clearSimulationTiming();
     this._running = false;
   },
   
@@ -238,32 +266,53 @@ var Simulation = Class.create({
     }
   },
   
-  _setupInterval: function () {
-    var that = this;
-
+  _setupSimulationTiming: function () {
     this._ips = 0;
     this._lastUpdate = (new Date)*1 - 1;
-    setInterval(function(){
-      that._$ipsField.text(that._ips.toFixed(1) + " ips");
-    }, 1000);
+    this._onRefreshIps();
+    this._refreshIpsInterval = setInterval($.proxy(this._onRefreshIps, this), this.options.ipsRefreshRate);
+
+    this._onRefreshPopulation();
+    this._refreshPopulationInterval = setInterval($.proxy(this._onRefreshPopulation, this), this.options.populationRefreshRate);
     
-    this._onTimeout();
+    this._onSimulationTick();
   },
 
-  _onTimeout: function () {
+  _onRefreshPopulation: function () {
+    var populationCount = this._agents.length,
+        populationDiff = populationCount - this._lastPopulationCount,
+        diffCss;
+
+    if (populationDiff >= 0) {
+      diffCss = 'color: green';
+    } else {
+      diffCss = 'color: red';
+    }
+
+    this._$populationField.html(populationCount + ' <span style="' + diffCss + '">(' + (populationDiff >= 0 ? '+' : '-') + (populationDiff) + ')</span>');
+    this._lastPopulationCount = populationCount;
+  },
+
+  _onRefreshIps: function () {
+    this._$ipsField.text(this._ips.toFixed(1) + " ips");
+  },
+
+  _onSimulationTick: function () {
     var currentIps,
         now;
 
     this.tick();
-    this._timeoutHandle = setTimeout($.proxy(this._onTimeout, this), Math.round(1000/this._speed));
+    this._simulationTimeout = setTimeout($.proxy(this._onSimulationTick, this), Math.round(1000/this._speed));
 
     currentIps = 1000 / ((now = new Date) - this._lastUpdate);
     this._ips += (currentIps - this._ips) / this.options.ipsFilter;
     this._lastUpdate = now;
   },
 
-  _removeInterval: function () {
-    clearInterval(this._timeoutHandle);
+  _clearSimulationTiming: function () {
+    clearTimeout(this._simulationTimeout);
+    clearInterval(this._onRefreshPopulation);
+    clearInterval(this._refreshIpsInterval);
   },
   
   tick: function() {
