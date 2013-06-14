@@ -6,11 +6,11 @@ var Simulation = Class.create({
         'behavior': SettlerBehavior,
         // Funny fact: increase a little this value and there is a critical mass
         // many influences, it will take ages to converge
-        'num': 35
+        'num': 40
       },
       'barbarian': {
         'behavior': BarbarianBehavior,
-        'num': 20
+        'num': 10
       },
       'item': {
         'num': 40
