@@ -76,6 +76,21 @@ kbd {
   width:100%;
 }
 
+.navbar-text p.field-tiny, .navbar-text p.field-wide {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: right;
+}
+.navbar-text p.field-tiny {
+  min-width: 50px;
+}
+.navbar-text p.field-wide {
+  min-width: 120px;
+}
+
 
 h3.success{
   background: #99FF33;

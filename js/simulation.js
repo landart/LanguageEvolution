@@ -28,7 +28,13 @@ var Simulation = Class.create({
     actionPlay: '#action-play',
     actionPause: '#action-pause',
     speedSlider: '#speed-slider',
-    iterationField: '#iterationField'    
+    iterationField: '#iterationField',
+    ipsField: '#ipsField',    
+
+    // The higher this value, the less the IPS will be affected by quick changes
+    // Setting this to 1 will show you the IPS of the last sampled frame only
+    // http://stackoverflow.com/questions/5078913/html5-canvas-performance-calculating-loops-frames-per-second
+    ipsFilter: 10,
   },
 
   // inner attributes
@@ -37,6 +43,8 @@ var Simulation = Class.create({
   _timeoutHandle: null,
   _running: false,
   _clock: 0,
+  _ips: 0,
+  _lastUpdate: null,
   _speed: 0,
   _console: null,
   _map: null,
@@ -90,6 +98,12 @@ var Simulation = Class.create({
     this._$map = $(this.options.map);
     this._$speedSlider = $(this.options.speedSlider);
     this._$iterationField = $(this.options.iterationField);
+    this._$ipsField = $(this.options.ipsField);
+
+    this._$iterationField
+      .tooltip({ placement: 'bottom', trigger: 'hover', title: 'Number of iterations' });
+    this._$ipsField
+      .tooltip({ placement: 'bottom', trigger: 'hover', title: 'Number of iteration computed by seconds' });
 
     $(this.options.actionReset)
       .click($.proxy(this._onReset, this))
@@ -219,12 +233,26 @@ var Simulation = Class.create({
   
   _setupInterval: function () {
     var that = this;
+
+    this._ips = 0;
+    this._lastUpdate = (new Date)*1 - 1;
+    setInterval(function(){
+      that._$ipsField.text(that._ips.toFixed(1) + " ips");
+    }, 1000);
+    
     this._onTimeout();
   },
 
   _onTimeout: function () {
+    var currentIps,
+        now;
+
     this.tick();
     this._timeoutHandle = setTimeout($.proxy(this._onTimeout, this), Math.round(1000/this._speed));
+
+    currentIps = 1000 / ((now = new Date) - this._lastUpdate);
+    this._ips += (currentIps - this._ips) / this.options.ipsFilter;
+    this._lastUpdate = now;
   },
 
   _removeInterval: function () {
