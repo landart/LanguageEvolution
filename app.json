@@ -34,11 +34,15 @@
             "update": "delta"  
         },
         { 
-            "path": "js/map.js",
+            "path": "js/gui/map.js",
             "update": "delta"  
         },
         { 
-            "path": "js/console.js",
+            "path": "js/gui/console.js",
+            "update": "delta"  
+        },
+        { 
+            "path": "js/gui/agentViewer.js",
             "update": "delta"  
         },
         { 

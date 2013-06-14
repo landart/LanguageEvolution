@@ -68,7 +68,7 @@ kbd {
   width: 10px;
   height: 10px;
   padding: 0px;
-  border-color: #ddd;
+  border-color: #f0f0f0;
 }
 #map td div {
   display: block;

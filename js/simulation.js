@@ -24,6 +24,7 @@ var Simulation = Class.create({
     
     console: '#console',
     map: '#map',
+    agentViewer: '#agent-viewer',
     actionReset: '#action-reset',
     actionPlay: '#action-play',
     actionPause: '#action-pause',
@@ -48,8 +49,10 @@ var Simulation = Class.create({
   _speed: 0,
   _console: null,
   _map: null,
+  _agentViewer: null,
   _$speedSlider: null,
   _$iterationField: null,
+  _$ipsField: null,
 
   // constructor
   init: function () {
@@ -60,6 +63,7 @@ var Simulation = Class.create({
     this._initItems();
     this._initAgents();
     this._initConsole();
+    this._initAgentViewer();
   },
 
   _onReset: function (event) {
@@ -95,7 +99,6 @@ var Simulation = Class.create({
   _initGui: function () {
     var that = this;
 
-    this._$map = $(this.options.map);
     this._$speedSlider = $(this.options.speedSlider);
     this._$iterationField = $(this.options.iterationField);
     this._$ipsField = $(this.options.ipsField);
@@ -149,6 +152,10 @@ var Simulation = Class.create({
 
   _initConsole: function () {
     this._console = new Console({ container: this.options.console });
+  },
+
+  _initAgentViewer: function () {
+    this._agentViewer = new AgentViewer({ container: this.options.agentViewer });
   },
   
   launchBarbarianHorde: function(size) {
