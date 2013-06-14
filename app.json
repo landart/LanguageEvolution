@@ -37,6 +37,10 @@
             "update": "delta"  
         },
         { 
+            "path": "js/agents/barbarianbehavior.js",
+            "update": "delta"  
+        },
+        { 
             "path": "js/gui/map.js",
             "update": "delta"  
         },

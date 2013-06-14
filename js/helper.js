@@ -49,7 +49,7 @@ function getRandomName(){
 }
 
 function getRandomLanguage(){
-  return Math.round(Math.random()*23) *15; // in steps of 15, 24 different colors 
+  return Math.ceil(Math.random()*24) *15; // in steps of 15, 24 different colors; 0 is reserved
 }
 
 function objectsAreEqual(object1, object2){

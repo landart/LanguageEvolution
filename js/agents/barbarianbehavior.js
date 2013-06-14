@@ -1,49 +1,27 @@
-/*var BarbarianBehavior = Class.create(Behavior.prototype,{
+var BarbarianBehavior = {
+
+  name: 'Barbarian',
+  range: 5,
+  criticism: 0.8, // barbarians have made their minds before invading 
+  karma: 0.8, 
+  defaultColor: 'hsl(0, 90%, 40%)',
+  canChangeLanguage: false,
+  randomDictionary: true,
+  
+  behave: function (agent) {
+    agent.randomMoveFromDirection('right');
     
-  getAction: function(){
-    // corrupt item names
-    var items = this._state.items;
-    
-    if (!items.length){
-      return;
+    if (agent.hasReachedBorder('left')){
+      agent.die();
     }
-    
-    var item = items[Math.floor(Math.random()*items.length)]; 
-    
-    item.setLastName(this._getRandomName());
-    item.setLastAgent(this);
-      
-    // tamper nearby agents' dictionaries
-    var agents = this._state.agents;
-    if (agents.length){
-      this._corruptDictionaries();
-    }
-      
-    // move anyway so that discovery is fostered
-    this._moveAgent();
-    
   },
   
-  _corruptDictionaries: function(){ 
-    var agents = this._state.agents;
-    var items = this._state.items;
-    var allItems = this._state.allItems;
-    
-    for (var index in agents){
-      var agent = agents[index];
-      var agentDic = agent.getDictionary();      
-
-      for (var i in agentDic) {
-
-        // 20% probability of the word being changed
-        if (Math.random() < 0.2) {
-          agentDic[i] = this._getRandomName();
-          allItems[i].setLastName(agentDic[i]);
-          allItems[i].setLastAgent(this)
-        }
-      }
-
-    }
-  }  
+  whenFindItem: function (agent, item) {},
   
-});*/
+  whenMeetAgent: function (thisAgent, otherAgent) {       
+    thisAgent.shareDictionariesWith(otherAgent);
+  },
+  
+  
+  
+};

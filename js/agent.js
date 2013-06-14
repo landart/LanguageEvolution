@@ -27,10 +27,23 @@ var Agent = Class.create({
     this._criticism = behavior.criticism || 0;
     this._range = behavior.range || 1;
     this._state = state || null;
-    this._dictionary = {};
-    this._color = 'hsl(0, 90%, 90%)';
-    this._$artefact = $(document.createElement('div')).css('background', this._color);    
+    this._color = behavior.defaultColor || 'hsl(0, 90%, 90%)';
+    this._$artefact = $(document.createElement('div')).css('background', this._color);
+    
+    this._initializeDictionary();    
   },
+
+  _initializeDictionary: function(){
+    this._dictionary = {};
+
+    if (this._behavior.randomDictionary){
+      for (var i in this._state.items){
+        var item = this._state.items[i];        
+        this._dictionary[item.getGenoma()] = getRandomName();        
+      }
+
+    }
+  }, 
 
   userInteraction: function () {
     var allItems = this._state.items;
@@ -115,6 +128,11 @@ var Agent = Class.create({
     this.setCoordinates(newCoordinates);
   },
   
+  randomMoveFromDirection: function(direction){
+    var newCoordinates = this._state.map.freeCoordinatesFromDirection(this.getCoordinates(),direction);
+    this.setCoordinates(newCoordinates);
+  },
+  
   isItemInDictionary: function(item){
     return this._dictionary[item.getGenoma()] ? true : false;
   },
@@ -173,6 +191,92 @@ var Agent = Class.create({
     return null;       
   },
   
+  shareDictionariesWith: function(otherAgent){
+    thisDic = this.getDictionary();
+    otherDic = otherAgent.getDictionary();
+      
+    for (var i in otherDic) {
+      var chance = 0;
+
+      // case 1: this agent does not know, foreigner does
+      if (!thisDic[i] && otherDic[i]) {
+        chance = 1;
+      }
+
+      // case 2: both agents know
+      if (thisDic[i] && otherDic[i]) {
+        chance = 0.5;
+      }
+
+      // add criticism and karma
+      chance = chance + otherAgent.getKarma() - this.getCriticism();
+
+      if (Math.random() < chance) {
+        
+        // do not affect if language is blocked
+        if (this._behavior.canChangeLanguage !== false){
+          // risk of mutation in transfer (neologism)
+          if (Math.random() < this.getNeologismFactor()){
+            thisDic[i] = getRandomName(); 
+          }
+          else {
+            thisDic[i] = otherDic[i];  
+          }        
+
+          // adjust karma and criticism values
+          this.decreaseCriticism();
+          otherAgent.increaseKarma();
+        }
+          
+      } 
+      else {
+        // one gains, the other loses
+        this.increaseCriticism();
+        otherAgent.decreaseKarma();
+      }
+    }
+
+  },
+   
+  checkIfWeSpeakTheSame: function(otherAgent){
+    
+    var thisLanguage = this.getLanguage();
+    var otherLanguage = otherAgent.getLanguage();
+    var language = getRandomLanguage();
+    
+    if (objectsAreEqual(this.getDictionary(), otherAgent.getDictionary())){
+      
+      // accept other's
+      if (!thisLanguage && otherLanguage){
+        language = otherLanguage;    
+      } 
+
+      // accept this one
+      else if (!otherLanguage && thisLanguage){
+        language = thisLanguage;
+      }  
+      
+      // it might be any of both
+      else if (thisLanguage && otherLanguage){
+        var factor = this.getKarma()*this.getCriticism()/otherAgent.getKarma()/otherAgent.getCriticism();
+        language = Math.random() < 0.5 * factor ? thisLanguage : otherLanguage;
+      }
+      
+      // if any of them has a language, then the random one
+
+      this.setLanguage(language);
+      otherAgent.setLanguage(language)
+
+    }
+    else {
+      // break equality since dictionaries are not equal and agents have a language assigned
+      if (thisLanguage == otherLanguage && thisLanguage){
+        this.setLanguage(language);
+      }
+    }
+        
+  },
+  
   getCriticism: function(){
     return this._criticism;
   },
@@ -212,11 +316,16 @@ var Agent = Class.create({
   },
   
   getLanguage: function(){
-    return this.language;
+    return this._language;
   },
   
   setLanguage: function(language) {
-    this.language = language;
+    
+    if (this._behavior.canChangeLanguage === false){
+      return;
+    }
+    
+    this._language = language;
     this._color = 'hsl(' + language + ', 90%, 25%)';
     this._$artefact.css('background', this._color);
   },
@@ -227,6 +336,16 @@ var Agent = Class.create({
   
   getNeologismFactor: function(){
     return this._options.neologismFactor;
+  },
+  
+  hasReachedBorder: function(border){
+    return this._state.map.areCoordinatesInTheBorder(this.getCoordinates(),border);
+  },
+  
+  die: function(){
+    this._state.map.getCellAtCoordinates(this.getCoordinates()).element = null;
+    this._$artefact.remove();
+    this._simulation.destroyAgent(this);
   }
   
 }); 

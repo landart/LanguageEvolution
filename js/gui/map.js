@@ -1,7 +1,7 @@
 var Map = Class.create({
 
   options: null,
-  default: {
+  'default': {
     size: 200,
   },
 
@@ -13,7 +13,7 @@ var Map = Class.create({
     var that = this;
 
     this._$target = $(target);
-    this.options = jQuery.extend(this.default, options || {});
+    this.options = jQuery.extend(this['default'], options || {});
 
     this._buildStructure();
 
@@ -59,8 +59,7 @@ var Map = Class.create({
 
 
   placeAtRandomCoordinates: function (element) {
-    var cells = this._cells.slice(0),
-        randomCell;
+    var cells = this._cells.slice(0);
 
     for (var i = cells.length - 1; i >= 0; i--) {
       if (cells[i].element !== null) {
@@ -68,13 +67,40 @@ var Map = Class.create({
       }
     }
 
+    return this.placeAtRandomCell(element,cells);
+  },
+  
+  placeAtRandomCell: function(element, cells) {    
+    var cell = null;
+    
     if (cells.length) {
-      randomCell = cells[Math.floor((Math.random() * cells.length))];
-      randomCell.element = element;
-      element.setCoordinates(randomCell.coordinates);
+      cell = cells[Math.floor((Math.random() * cells.length))];
+      cell.element = element;
+      element.setCoordinates(cell.coordinates);
       return true;
-    } else {
-      return false;
+    }
+    
+    return false;      
+  },
+  
+  placeAtRandomCoordinatesNearBorder: function(element, border){
+    switch (border) {
+      case 'right':
+      case 'left':
+      case 'bottom':
+      case 'up':
+      default:
+        var cells = [];
+        var x = this.options.size-1;
+        
+        for (var y = 0; y < this.options.size; y++){
+          var coordinates = {x:x,y:y};
+          if (this.isCoordinatesEmpty(coordinates)){
+            cells.push(this.getCellAtCoordinates(coordinates));
+          }
+        }
+        
+        return this.placeAtRandomCell(element,cells);
     }
   },
 
@@ -113,6 +139,16 @@ var Map = Class.create({
 
   freeCoordinatesAround: function (coordinates, range) {    
     
+    freeCoordinates = this.allFreeCoordinatesAround(coordinates, range);
+
+    if (freeCoordinates.length) {
+      return freeCoordinates[Math.floor(Math.random() * freeCoordinates.length)];
+    }
+
+    return coordinates;
+  },
+  
+  allFreeCoordinatesAround: function(coordinates, range){
     var cells = this.getCellsAround(coordinates, range);
     var freeCoordinates = [];
     
@@ -121,12 +157,45 @@ var Map = Class.create({
         freeCoordinates.push(cells[i].coordinates);
       }
     }
-
+    
+    return freeCoordinates;
+  },
+  
+  freeCoordinatesFromDirection: function(coordinates, direction){
+    var allFreeCoords = this.allFreeCoordinatesAround(coordinates);
+    
+    var freeCoordinates = [];
+    
+    for (var i in allFreeCoords){
+      if ( $.inArray(direction,this.getRelativePositionOfCoordinates(allFreeCoords[i], coordinates)) == -1) {
+        freeCoordinates.push(allFreeCoords[i]);
+      }
+    }
+        
     if (freeCoordinates.length) {
       return freeCoordinates[Math.floor(Math.random() * freeCoordinates.length)];
     }
 
     return coordinates;
+  },
+  
+  getRelativePositionOfCoordinates: function(target, reference){
+    var position = [];
+     
+    if(target.y > reference.y){
+      position.push('bottom');
+    }
+    if (target.y < reference.y){
+      position.push('top');
+    }
+    if (target.x > reference.x){
+      position.push('right');
+    }
+    if (target.x < reference.x){
+      position.push('left');
+    }
+    
+    return position;
   },
 
   elementsAround: function (coordinates, range) {
@@ -145,6 +214,20 @@ var Map = Class.create({
   
   elementAtCoordinates: function (coordinates) {
     return this._cells[coordinates.y * this.options.size + coordinates.x].element;
+  },
+  
+  areCoordinatesInTheBorder: function(coordinates, border){
+    switch (border) {
+      case 'right':
+      case 'left':
+      case 'bottom':
+      case 'up':
+      default:
+        if (coordinates.x == 0){
+          return true;
+        }
+        return false;
+    }
   }
 
 });

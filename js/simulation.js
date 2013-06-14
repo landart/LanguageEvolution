@@ -9,11 +9,10 @@ var Simulation = Class.create({
         'num': 35
       },
       'barbarian': {
-        //'behavior': BarbarianBehavior,
-        'num': 2
+        'behavior': BarbarianBehavior,
+        'num': 20
       },
       'item': {
-        //'behavior': ItemBehavior,
         'num': 40
       }
     },
@@ -30,6 +29,7 @@ var Simulation = Class.create({
     actionReset: '#action-reset',
     actionPlay: '#action-play',
     actionPause: '#action-pause',
+    actionHorde: '#action-horde',
     speedSlider: '#speed-slider',
     iterationField: '#iterationField',
     ipsField: '#ipsField',    
@@ -105,6 +105,9 @@ var Simulation = Class.create({
       case 83: // s
         this._onPause(event);
         break;
+      case 66: // b
+        this._launchBarbarianHorde();
+        break;
     }
   },
 
@@ -135,6 +138,7 @@ var Simulation = Class.create({
         title: 'Reset',
         content: 'Shortcut <kbd>R</kbd>',
         container: 'body' });
+        
     $(this.options.actionPlay)
       .click($.proxy(this._onPlay, this))
       .popover({
@@ -144,10 +148,30 @@ var Simulation = Class.create({
         title: 'Play',
         content: 'Shortcut <kbd>P</kbd>',
         container: 'body' });
+        
+    
     $(this.options.actionPause)
       .click($.proxy(this._onPause, this))
-      .popover({ placement: 'bottom', trigger: 'hover', html: true, title: 'Pause', content: 'Shortcut <kbd>S</kbd>', container: 'body' });
-    $(window.document).bind('keyup', $.proxy(this._keyHandler, this));
+      .popover({
+        placement: 'bottom',
+        trigger: 'hover',
+        html: true,
+        title: 'Pause',
+        content: 'Shortcut <kbd>S</kbd>',
+        container: 'body' });
+    
+    $(this.options.actionHorde)
+      .click($.proxy(this._launchBarbarianHorde, this))
+      .popover({
+        placement: 'bottom',
+        trigger: 'hover',
+        html: true,
+        title: 'Barbarian Horde',
+        content: 'Shortcut <kbd>B</kbd>',
+        container: 'body' });
+        
+    $(window.document).bind('keyup', $.proxy(this._keyHandler, this)); 
+
 
     this._$speedSlider
       .slider({ min: 1, max: 100, value: this._speed || 1 })
@@ -170,11 +194,9 @@ var Simulation = Class.create({
     }
   },
   
-  _initAgents: function () {
-    var agent;
-
+  _initAgents: function () {    
     for (var i = 0; i < this.options.agents.settler.num; i++) {
-      agent = new Agent(this.options.agents.settler.behavior, this.getState(), this.options, this);
+      var agent = new Agent(this.options.agents.settler.behavior, this.getState(), this.options, this);
       this._agents.push(agent);
       this._map.placeAtRandomCoordinates(agent);
     }
@@ -196,18 +218,15 @@ var Simulation = Class.create({
     this._agentViewer = new AgentViewer({ container: this.options.agentViewer }, this.getState(), this);
   },
   
-  launchBarbarianHorde: function(size) {
-    size = size || this.options.agents.barbarian.num;
+  _launchBarbarianHorde: function() {
+    var size = this.options.agents.barbarian.num;
     
-    var entry = getRandomCardinalPoint();
-    var exit = getRandomCardinalPoint();
-    
-    for (var i = 0; i < size; i++){
-      var j = this._agents.length + i;
-      
-      this._agents[j] = new Barbarian(i, this.getState(), entry, exit);
-      this._world.place(this._agents[j]);
+    for (var i = 0; i < size; i++) {
+      var barbarian = new Agent(this.options.agents.barbarian.behavior, this.getState(), this.options, this);
+      this._agents.push(barbarian);
+      this._map.placeAtRandomCoordinatesNearBorder(barbarian,"right");
     }
+    
   },
   
   getState: function(){
@@ -331,7 +350,9 @@ var Simulation = Class.create({
   
   tick: function() {
     for (var i in this._agents) {
-      this._agents[i].tick();
+      if (this._agents[i]){
+        this._agents[i].tick();
+      }      
     }
     
     this._clock++;
@@ -364,6 +385,14 @@ var Simulation = Class.create({
   _clearMessage: function(){
     this._console.clear();
   },
+  
+  destroyAgent: function(agent){    
+    this._agents = $.grep(this._agents, function(value) {
+      return value !== agent;
+    });
+    
+    delete agent;    
+  }
   
 }); 
 
