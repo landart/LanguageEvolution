@@ -136,18 +136,6 @@ table tr:last-child td{
   border-bottom-width: 1px;
 }
 
-span.item{
-  background-color:yellow;
-}
-
-span.settler{
-  background-color: #9999FF;
-}
-
-span.barbarian{
-  background-color: red;
-}
-
 #dictionaries td{
   font-size: 80%;
 }
