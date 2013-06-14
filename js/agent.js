@@ -214,7 +214,7 @@ var Agent = Class.create({
   
   setLanguage: function(language){
     this.language = language;
-    this._$artefact.css("background","hsl("+language+",75%,25%)");
+    this._$artefact.css("background","hsl("+language+",90%,25%)");
   },
   
   getNeologismFactor: function(){
