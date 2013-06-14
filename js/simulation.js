@@ -40,8 +40,9 @@ var Simulation = Class.create({
     // http://stackoverflow.com/questions/5078913/html5-canvas-performance-calculating-loops-frames-per-second
     ipsFilter: 10,
 
-    ipsRefreshRate: 1000, // ms
-    populationRefreshRate: 5000, // ms
+    ipsRefreshRate: 1000,         // ms
+    populationRefreshRate: 5000,  // ms
+    agentViewerRefreshRate: 1000, // ms
   },
 
   // inner attributes
@@ -50,6 +51,7 @@ var Simulation = Class.create({
   _simulationTimeout: null,
   _refreshPopulationInterval: null,
   _refreshIpsInterval: null,
+  _refreshAgentViewInterval: null,
   _running: false,
   _clock: 0,
   _ips: 0,
@@ -183,7 +185,7 @@ var Simulation = Class.create({
   },
 
   _initAgentViewer: function () {
-    this._agentViewer = new AgentViewer({ container: this.options.agentViewer });
+    this._agentViewer = new AgentViewer({ container: this.options.agentViewer }, this.getState());
   },
   
   launchBarbarianHorde: function(size) {
@@ -275,6 +277,9 @@ var Simulation = Class.create({
     this._onRefreshPopulation();
     this._refreshPopulationInterval = setInterval($.proxy(this._onRefreshPopulation, this), this.options.populationRefreshRate);
     
+    this._agentViewer.refresh();
+    this._refreshAgentViewInterval = setInterval($.proxy(this._agentViewer.refresh, this._agentViewer), this.options.agentViewerRefreshRate);
+
     this._onSimulationTick();
   },
 
@@ -313,6 +318,7 @@ var Simulation = Class.create({
     clearTimeout(this._simulationTimeout);
     clearInterval(this._onRefreshPopulation);
     clearInterval(this._refreshIpsInterval);
+    clearInterval(this._refreshAgentViewInterval);
   },
   
   tick: function() {

@@ -14,6 +14,9 @@
             "path": "lib/bootstrap-slider/js/bootstrap-slider.js"
         },
         {
+            "path": "lib/pusher-color/0.2.4/pusher.color.min.js"
+        },
+        {
             "path": "js/helper.js",
             "update": "delta"
         },

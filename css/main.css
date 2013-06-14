@@ -52,6 +52,21 @@ kbd {
   white-space: nowrap;
 }
 
+.navbar-text p.field-tiny, .navbar-text p.field-wide {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: center;
+}
+.navbar-text p.field-tiny {
+  min-width: 50px;
+}
+.navbar-text p.field-wide {
+  min-width: 120px;
+}
+
 .clickable {
    cursor: pointer;
 }
@@ -76,20 +91,23 @@ kbd {
   width:100%;
 }
 
-.navbar-text p.field-tiny, .navbar-text p.field-wide {
+#agent-viewer {
+  padding: 0px;
+  line-height: 0px;
+}
+#agent-viewer div {
+  margin: 1px;
   display: inline-block;
-  margin: 0;
-  padding: 0;
-  padding-left: 10px;
-  padding-right: 10px;
-  text-align: center;
+  border: 1px solid #ccc;
+  width: 20px;
+  height: 20px;
 }
-.navbar-text p.field-tiny {
-  min-width: 50px;
+#agent-viewer div:hover {
+  -moz-box-shadow: 0 0 5px #888;
+  -webkit-box-shadow: 0 0 5px#888;
+  box-shadow: 0 0 5px #888;
 }
-.navbar-text p.field-wide {
-  min-width: 120px;
-}
+
 
 
 h3.success{

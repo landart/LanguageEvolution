@@ -8,6 +8,7 @@ var Agent = Class.create({
 
   _state: null,
   _coordinates: null,
+  _color: null,
   _$artefact: null,
   _$cell: null,  
   _index: 0,      
@@ -25,7 +26,8 @@ var Agent = Class.create({
     this._range = behavior.range || 1;
     this._state = state || null;
     this._dictionary = {};
-    this._$artefact = $(document.createElement('div')).css({ 'background-color': 'red' });    
+    this._color = 'red';
+    this._$artefact = $(document.createElement('div')).css('background', this._color);    
   },
 
   userInteraction: function () {
@@ -201,7 +203,7 @@ var Agent = Class.create({
     }
   },
   
-  _decreaseValue: function(index){
+  _decreaseValue: function(index) {
     this[index] -= 0.01;
     if (this[index] < 0.01){
       this[index] = 0.01;
@@ -212,9 +214,14 @@ var Agent = Class.create({
     return this.language;
   },
   
-  setLanguage: function(language){
+  setLanguage: function(language) {
     this.language = language;
-    this._$artefact.css("background","hsl("+language+",90%,25%)");
+    this._color = 'hsl(' + language + ', 90%, 25%)';
+    this._$artefact.css('background', this._color);
+  },
+
+  getColor: function () {
+    return this._color;
   },
   
   getNeologismFactor: function(){
