@@ -19,7 +19,7 @@ var Simulation = Class.create({
     },
 
     genomicLenght: 32,
-    speed: 50,             
+    speed: 10,             
     worldSize: 60,
     similarityThreshold: 0.25,
     neologismFactor: 0.00001, // very low, otherwise neologisms won't allow convergence
@@ -40,9 +40,9 @@ var Simulation = Class.create({
     // http://stackoverflow.com/questions/5078913/html5-canvas-performance-calculating-loops-frames-per-second
     ipsFilter: 10,
 
-    ipsRefreshRate: 1000,         // ms
+    ipsRefreshRate: 200,         // ms
     populationRefreshRate: 5000,  // ms
-    agentViewerRefreshRate: 1000, // ms
+    agentViewerRefreshRate: 500, // ms
   },
 
   // inner attributes
@@ -174,9 +174,17 @@ var Simulation = Class.create({
     var agent;
 
     for (var i = 0; i < this.options.agents.settler.num; i++) {
-      agent = new Agent(this.options.agents.settler.behavior, this.getState(), this.options);
+      agent = new Agent(this.options.agents.settler.behavior, this.getState(), this.options, this);
       this._agents.push(agent);
       this._map.placeAtRandomCoordinates(agent);
+    }
+  },
+  
+  hideDictionaryTooltips: function(){
+    var allItems = this._items;
+
+    for (var i in allItems) {
+      allItems[i].$getCell().tooltip('destroy');
     }
   },
 
@@ -185,7 +193,7 @@ var Simulation = Class.create({
   },
 
   _initAgentViewer: function () {
-    this._agentViewer = new AgentViewer({ container: this.options.agentViewer }, this.getState());
+    this._agentViewer = new AgentViewer({ container: this.options.agentViewer }, this.getState(), this);
   },
   
   launchBarbarianHorde: function(size) {

@@ -17,26 +17,26 @@ var Agent = Class.create({
   _language: 0,
   
   _options: null,
+  _simulation: null,
 
-  init: function (behavior, state, options) {
+  init: function (behavior, state, options, simulation) {
     this._options = options || null;
     this._behavior = behavior || null;
+    this._simulation = simulation || null;
     this._karma = behavior.karma || 0;
     this._criticism = behavior.criticism || 0;
     this._range = behavior.range || 1;
     this._state = state || null;
     this._dictionary = {};
-    this._color = 'red';
+    this._color = 'hsl(0, 90%, 90%)';
     this._$artefact = $(document.createElement('div')).css('background', this._color);    
   },
 
   userInteraction: function () {
-    var allItems = this._state.items,
-        item;
+    var allItems = this._state.items;
+    var item = null;
 
-    for (var i in allItems) {
-      allItems[i].$getCell().tooltip('destroy');
-    }
+    this._simulation.hideDictionaryTooltips();
 
     for (var dictionaryGenoma in this._dictionary) {
       for (var i in allItems) {
@@ -52,6 +52,7 @@ var Agent = Class.create({
         }
       }
     }
+
   },
 
   tick: function () {
