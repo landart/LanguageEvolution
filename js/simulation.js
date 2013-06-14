@@ -18,9 +18,9 @@ var Simulation = Class.create({
 
     genomicLenght: 32,
     speed: 50,             
-    worldSize: 50,
+    worldSize: 60,
     similarityThreshold: 0.25,
-    neologismFactor: 0.00001, // very low, otherwise neologisms won't allow convergent
+    neologismFactor: 0.00001, // very low, otherwise neologisms won't allow convergence
     
     console: '#console',
     map: '#map',
