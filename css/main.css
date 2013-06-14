@@ -82,7 +82,7 @@ kbd {
   padding: 0;
   padding-left: 10px;
   padding-right: 10px;
-  text-align: right;
+  text-align: center;
 }
 .navbar-text p.field-tiny {
   min-width: 50px;

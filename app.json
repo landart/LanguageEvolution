@@ -53,6 +53,10 @@
             "update": "delta"
         },
         {
+            "path": "lib/bootstrap/2.3.2/css/bootstrap-responsive.min.css",
+            "update": "delta"
+        },
+        {
             "path": "lib/bootstrap-slider/css/slider.css",
             "update": "delta"
         },
