@@ -6,14 +6,14 @@ var Simulation = Class.create({
         'behavior': SettlerBehavior,
         // Funny fact: increase a little this value and there is a critical mass
         // many influences, it will take ages to converge
-        'num': 40
+        'num': 50
       },
       'barbarian': {
         'behavior': BarbarianBehavior,
-        'num': 10
+        'num': 20
       },
       'item': {
-        'num': 40
+        'num': 50
       }
     },
 
@@ -21,7 +21,7 @@ var Simulation = Class.create({
     speed: 10,             
     worldSize: 60,
     similarityThreshold: 0.25,
-    dictionarySimilarityThreshold: 0.10,
+    dictionarySimilarityThreshold: 0.05,
     neologismFactor: 0.00001, // very low, otherwise neologisms won't allow convergence
     
     console: '#console',
