@@ -184,3 +184,21 @@ table tr:last-child td{
 .item-cell{
   background-color: hsl(120,25%,80%);
 }
+
+#agent-details label{
+  display:inline-block;
+  width: 6.5em;
+}
+
+#agent-details .id, #agent-details label{
+  font-weight: bold;
+  font-color: #333;
+}
+
+#agent-details .id{
+  font-style: italic;
+}
+
+#agent-details .id label{
+  font-style: normal;
+}

@@ -19,7 +19,7 @@ var Agent = Class.create({
   _options: null,
   _simulation: null,
 
-  init: function (behavior, state, options, simulation) {
+  init: function (behavior, state, options, simulation, index) {
     this._options = options || null;
     this._behavior = behavior || null;
     this._simulation = simulation || null;
@@ -29,6 +29,7 @@ var Agent = Class.create({
     this._state = state || null;
     this._color = behavior.defaultColor || 'hsl(0, 90%, 90%)';
     this._$artefact = $(document.createElement('div')).css('background', this._color);
+    this._index = index || 0;
     
     this._initializeDictionary();    
   },
@@ -113,6 +114,10 @@ var Agent = Class.create({
     if (this._$cell) {
       this._$cell.append(this._$artefact);
     }
+  },
+  
+  getIndex: function(){
+    return this._index;
   },
   
   getCoordinates: function() {
@@ -302,14 +307,14 @@ var Agent = Class.create({
   },
   
   _increaseValue: function(index){
-    this[index] += 0.02;
+    this[index] *= 1.02;
     if (this[index] > 1){
       this[index] = 1;
     }
   },
   
   _decreaseValue: function(index) {
-    this[index] -= 0.01;
+    this[index] /= 1.01;
     if (this[index] < 0.01){
       this[index] = 0.01;
     }

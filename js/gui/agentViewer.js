@@ -8,6 +8,10 @@ var AgentViewer = Class.create({
   
   _displayingAgent: null,
   _simulation: null,
+  
+  _$agentDetailsHeader: $('#agent-details-header'),
+  _$agentDetails: $('#agent-details'),
+  _agentDetailsTemplate: '<ul class="unstyled"><li class="id"><label>ID:</label> $id</li><li><label>Karma:</label> $karma</li><li><label>Criticism:</label> $criticism</li><li><label>Language:</label> $language</li></ul>',
 
   init: function (options, state, simulation) {
 
@@ -37,10 +41,12 @@ var AgentViewer = Class.create({
     if (agent !== this._displayingAgent){
       agent.userInteraction();
       this._displayingAgent = agent;  
+      this._showAgentDetails();
     }
     else {
       this._simulation.hideDictionaryTooltips();
       this._displayingAgent = null;
+      this._hideAgentDetails();
     }
     
   },
@@ -55,8 +61,9 @@ var AgentViewer = Class.create({
     }
     
     if (this._displayingAgent){
+      this._updateAgentDetails();
       // I'd very much like it but it does a heck of an effect with the refreshing recreating everything
-      this._displayingAgent.userInteraction();
+      //this._displayingAgent.userInteraction();
     }
 
     // It's a bit confusing... visually appealing, but where is the last agent I just clicked on?
@@ -71,5 +78,29 @@ var AgentViewer = Class.create({
 
     this._$container.append(elements);*/
   },
+  
+  _showAgentDetails: function(){
+    this._$agentDetailsHeader.removeClass('hidden');    
+    this._updateAgentDetails();       
+    this._$agentDetails.removeClass('hidden');
+  },
+  
+  _updateAgentDetails: function(){
+    var agent = this._displayingAgent;
+        
+    this._$agentDetails.html(
+      this._agentDetailsTemplate
+        .replace('$id', agent.getIndex())
+        .replace('$karma',Math.round(agent.getKarma()*1000)/1000)
+        .replace('$criticism',Math.round(agent.getCriticism()*1000)/1000)
+        .replace('$language',agent.getLanguage())
+    );
+  },
+  
+  _hideAgentDetails: function(){
+    this._$agentDetailsHeader.addClass('hidden');
+    this._$agentDetails.addClass('hidden');
+    this._$agentDetails.html("");
+  }
 
 });

@@ -196,7 +196,7 @@ var Simulation = Class.create({
   
   _initAgents: function () {    
     for (var i = 0; i < this.options.agents.settler.num; i++) {
-      var agent = new Agent(this.options.agents.settler.behavior, this.getState(), this.options, this);
+      var agent = new Agent(this.options.agents.settler.behavior, this.getState(), this.options, this, i);
       this._agents.push(agent);
       this._map.placeAtRandomCoordinates(agent);
     }
