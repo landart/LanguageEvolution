@@ -15,7 +15,6 @@ body {
   margin: 0 auto -60px;
 }
 #wrap .container {
-  display: block!important;
   padding-top: 60px;
   animation: fadein 1s;
   -moz-animation: fadein 1s; /* Firefox */
