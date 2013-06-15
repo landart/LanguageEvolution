@@ -15,7 +15,7 @@
 
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
-      <div class="container">
+      <div class="container" style="display:none;">
         <a class="brand" href="#">Language Evolution</a>
         <ul class="nav">
           <li class="divider-vertical"></li>
@@ -36,13 +36,14 @@
   </div>
 
   <div id="wrap">
-    <div class="container">
+    <div class="container" style="display:none;">
       <div class="row">
         <div class="span3">
           <div class="well">
             <a class="nav-header">Agents</a>
-            <div id="agent-viewer">
-            </div>
+            <div id="agent-viewer"></div>
+            <a class="nav-header hidden" id="agent-details-header">Agent details</a>
+            <div class="hidden" id="agent-details"></div>
           </div>
           <div id="console"></div>
         </div>
