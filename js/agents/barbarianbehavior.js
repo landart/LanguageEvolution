@@ -2,8 +2,7 @@ var BarbarianBehavior = {
 
   name: 'Barbarian',
   range: 5,
-  criticism: 0.8, // barbarians have made their minds before invading 
-  karma: 0.8, 
+  karma: 0.8, // barbarians have made their minds before invading 
   defaultColor: 'hsl(0, 90%, 40%)',
   canChangeLanguage: false,
   randomDictionary: true,

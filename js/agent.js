@@ -3,8 +3,9 @@ var Agent = Class.create({
 
   _behavior: null,
   _karma: 0,
-  _criticism: 0,
   _range: 1,
+  _karmaWeight: 100,
+  _minKarma: 0.01,
 
   _state: null,
   _coordinates: null,
@@ -15,6 +16,7 @@ var Agent = Class.create({
   _dictionary: null,  
   
   _language: 0,
+  _numLanguages: 15,
   
   _options: null,
   _simulation: null,
@@ -24,7 +26,6 @@ var Agent = Class.create({
     this._behavior = behavior || null;
     this._simulation = simulation || null;
     this._karma = behavior.karma || 0;
-    this._criticism = behavior.criticism || 0;
     this._range = behavior.range || 1;
     this._state = state || null;
     this._color = behavior.defaultColor || 'hsl(0, 90%, 90%)';
@@ -213,8 +214,8 @@ var Agent = Class.create({
         chance = 0.5;
       }
 
-      // add criticism and karma
-      chance = chance + otherAgent.getKarma() - this.getCriticism();
+      // add karma
+      chance = chance + Math.log(otherAgent.getKarma()/this.getKarma())/this._karmaWeight;
 
       if (Math.random() < chance) {
         
@@ -228,15 +229,15 @@ var Agent = Class.create({
             thisDic[i] = otherDic[i];  
           }        
 
-          // adjust karma and criticism values
-          this.decreaseCriticism();
+          // adjust karma values
+          this.decreaseKarma();
           otherAgent.increaseKarma();
         }
           
       } 
       else {
         // one gains, the other loses
-        this.increaseCriticism();
+        this.increaseKarma();
         otherAgent.decreaseKarma();
       }
     }
@@ -247,7 +248,7 @@ var Agent = Class.create({
     
     var thisLanguage = this.getLanguage();
     var otherLanguage = otherAgent.getLanguage();
-    var language = getRandomLanguage();
+    var language = getRandomLanguage(this._numLanguages);
     
     if (objectsAreEqual(this.getDictionary(), otherAgent.getDictionary())){
       
@@ -263,7 +264,7 @@ var Agent = Class.create({
       
       // it might be any of both
       else if (thisLanguage && otherLanguage){
-        var factor = this.getKarma()*this.getCriticism()/otherAgent.getKarma()/otherAgent.getCriticism();
+        var factor = Math.log(this.getKarma()/otherAgent.getKarma())/this._karmaWeight;
         language = Math.random() < 0.5 * factor ? thisLanguage : otherLanguage;
       }
       
@@ -282,22 +283,10 @@ var Agent = Class.create({
         
   },
   
-  getCriticism: function(){
-    return this._criticism;
-  },
-  
   getKarma: function(){
     return this._karma;
   },
-  
-  increaseCriticism: function(){
-    this._increaseValue("_criticism");
-  },
-  
-  decreaseCriticism: function(){
-    this._decreaseValue("_criticism");
-  },
-  
+
   increaseKarma: function(){
     this._increaseValue("_karma");
   },
@@ -307,21 +296,25 @@ var Agent = Class.create({
   },
   
   _increaseValue: function(index){
-    this[index] *= 1.02;
+    this[index] *= 1.001;
     if (this[index] > 1){
       this[index] = 1;
     }
   },
   
   _decreaseValue: function(index) {
-    this[index] /= 1.01;
-    if (this[index] < 0.01){
-      this[index] = 0.01;
+    this[index] /= 1.001;
+    if (this[index] < this._minKarma){
+      this[index] = this._minKarma;
     }
   },
   
   getLanguage: function(){
     return this._language;
+  },
+  
+  getDisplayLanguage: function(){
+    return this._language/this._numLanguages;
   },
   
   setLanguage: function(language) {

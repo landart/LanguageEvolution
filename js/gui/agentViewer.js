@@ -11,7 +11,7 @@ var AgentViewer = Class.create({
   
   _$agentDetailsHeader: $('#agent-details-header'),
   _$agentDetails: $('#agent-details'),
-  _agentDetailsTemplate: '<ul class="unstyled"><li class="id"><label>ID:</label> $id</li><li><label>Karma:</label> $karma</li><li><label>Criticism:</label> $criticism</li><li><label>Language:</label> $language</li></ul>',
+  _agentDetailsTemplate: '<ul class="unstyled"><li class="id"><label>ID:</label> $id</li><li><label>Karma:</label> $karma</li><li><label>Language:</label> $language</li></ul>',
 
   init: function (options, state, simulation) {
 
@@ -92,8 +92,7 @@ var AgentViewer = Class.create({
       this._agentDetailsTemplate
         .replace('$id', agent.getIndex())
         .replace('$karma',Math.round(agent.getKarma()*1000)/1000)
-        .replace('$criticism',Math.round(agent.getCriticism()*1000)/1000)
-        .replace('$language',agent.getLanguage())
+        .replace('$language',agent.getDisplayLanguage())
     );
   },
   
