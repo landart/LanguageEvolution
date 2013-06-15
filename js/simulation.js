@@ -10,7 +10,7 @@ var Simulation = Class.create({
       },
       'barbarian': {
         'behavior': BarbarianBehavior,
-        'num': 10
+        'num': 20
       },
       'item': {
         'num': 40
@@ -21,7 +21,10 @@ var Simulation = Class.create({
     speed: 10,             
     worldSize: 60,
     similarityThreshold: 0.25,
+    dictionarySimilarityThreshold: 0.05,
     neologismFactor: 0.00001, // very low, otherwise neologisms won't allow convergence
+    diffLanguages: 15,
+    karmaWeight: 100,
     
     console: '#console',
     map: '#map',
@@ -355,12 +358,70 @@ var Simulation = Class.create({
       }      
     }
     
+    this._checkLanguages();
+    
     this._clock++;
     this._$iterationField.text(this._clock);
     
     /*if (this._checkConvergence()){
       this._showSuccessMessage();   
     }*/
+  },
+  
+  _checkLanguages: function(){
+        
+    for (var i = 0; i < this._agents.length-1; i++){
+      var oneAgent = this._agents[i];
+      var otherAgent = this._agents[i+1];
+
+      // already processed or blocked, do nothing
+      if (oneAgent.canChangeLanguage() || otherAgent.canChangeLanguage()){
+        this._checkIfTheySpeakTheSame(oneAgent,otherAgent);
+      }                            
+    }
+  },
+  
+  _checkIfTheySpeakTheSame: function(oneAgent, otherAgent){
+    
+    var thisLanguage = oneAgent.getLanguage();
+    var otherLanguage = otherAgent.getLanguage();
+    var language = getRandomLanguage(this.options.diffLanguages);
+    
+    if ( dictionarySimilarity(oneAgent.getDictionary(), otherAgent.getDictionary()) < this.options.dictionarySimilarityThreshold ){
+      
+      // accept other's
+      if (!thisLanguage && otherLanguage){
+        language = otherLanguage;    
+      } 
+
+      // accept this one
+      else if (!otherLanguage && thisLanguage){
+        language = thisLanguage;
+      }  
+      
+      // it might be any of both
+      else if (thisLanguage && otherLanguage){
+        var factor = Math.log(oneAgent.getKarma()/otherAgent.getKarma())/this.options.karmaWeight;
+        language = Math.random() < 0.5 * factor ? thisLanguage : otherLanguage;
+      }
+      
+      // if any of them has a language, then the random one
+
+      oneAgent.setLanguage(language);
+      otherAgent.setLanguage(language)
+
+    }
+    else {
+      // break equality since dictionaries are not equal and agents have a language assigned
+      if (thisLanguage == otherLanguage){
+        oneAgent.setLanguage(language);
+      }
+      
+      if (!otherLanguage){
+        otherAgent.setLanguage(getRandomLanguage(this.options.diffLanguages));
+      }
+    }
+        
   },
   
   _checkConvergence: function(){

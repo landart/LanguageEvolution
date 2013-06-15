@@ -34,7 +34,7 @@ function getRandomGenoma(length){
 }
 
 function genomicSimilarity(gen1, gen2){
-  diff = 0;
+  var diff = 0;
   for (var i =0; i<gen1.length; i++){
     if (gen1[i] != gen2[i]) diff ++;  
   }
@@ -50,21 +50,18 @@ function getRandomName(){
 
 function getRandomLanguage(step){
   step = step || 15;
-  return Math.ceil(Math.random()*Math.round(360/step)) *step; // in steps of 15, 24 different colors; 0 is reserved
+  return Math.ceil(Math.random()*Math.round(360/step)) *step; // 0 is reserved
 }
 
-function objectsAreEqual(object1, object2){
-    for (var i in object1){
-      if (object1[i] != object2[i]){
-        return false;
-      }
-    }
-    
-    for (var i in object2){
-      if (object1[i] != object2[i]){
-        return false;
-      }
-    }
-    
-    return true;
+function dictionarySimilarity(dic1, dic2){
+  var diff = 0;
+  
+  var allKeys = $.unique($.merge(Object.keys(dic1), Object.keys(dic2)));
+  
+  for (var i in allKeys){
+    var key = allKeys[i];
+    if (dic1[key] != dic2[key]) diff ++;
+  }
+   
+  return diff/allKeys.length;
 }

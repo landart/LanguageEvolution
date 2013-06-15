@@ -18,7 +18,6 @@ var SettlerBehavior = {
   
   whenMeetAgent: function (thisAgent, otherAgent) {       
     thisAgent.shareDictionariesWith(otherAgent);
-    thisAgent.checkIfWeSpeakTheSame(otherAgent);
   }
   
 };

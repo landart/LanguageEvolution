@@ -4,7 +4,6 @@ var Agent = Class.create({
   _behavior: null,
   _karma: 0,
   _range: 1,
-  _karmaWeight: 100,
   _minKarma: 0.01,
 
   _state: null,
@@ -16,7 +15,6 @@ var Agent = Class.create({
   _dictionary: null,  
   
   _language: 0,
-  _numLanguages: 15,
   
   _options: null,
   _simulation: null,
@@ -215,7 +213,7 @@ var Agent = Class.create({
       }
 
       // add karma
-      chance = chance + Math.log(otherAgent.getKarma()/this.getKarma())/this._karmaWeight;
+      chance = chance + Math.log(otherAgent.getKarma()/this.getKarma())/this._options.karmaWeight;
 
       if (Math.random() < chance) {
         
@@ -242,45 +240,6 @@ var Agent = Class.create({
       }
     }
 
-  },
-   
-  checkIfWeSpeakTheSame: function(otherAgent){
-    
-    var thisLanguage = this.getLanguage();
-    var otherLanguage = otherAgent.getLanguage();
-    var language = getRandomLanguage(this._numLanguages);
-    
-    if (objectsAreEqual(this.getDictionary(), otherAgent.getDictionary())){
-      
-      // accept other's
-      if (!thisLanguage && otherLanguage){
-        language = otherLanguage;    
-      } 
-
-      // accept this one
-      else if (!otherLanguage && thisLanguage){
-        language = thisLanguage;
-      }  
-      
-      // it might be any of both
-      else if (thisLanguage && otherLanguage){
-        var factor = Math.log(this.getKarma()/otherAgent.getKarma())/this._karmaWeight;
-        language = Math.random() < 0.5 * factor ? thisLanguage : otherLanguage;
-      }
-      
-      // if any of them has a language, then the random one
-
-      this.setLanguage(language);
-      otherAgent.setLanguage(language)
-
-    }
-    else {
-      // break equality since dictionaries are not equal and agents have a language assigned
-      if (thisLanguage == otherLanguage && thisLanguage){
-        this.setLanguage(language);
-      }
-    }
-        
   },
   
   getKarma: function(){
@@ -314,7 +273,7 @@ var Agent = Class.create({
   },
   
   getDisplayLanguage: function(){
-    return this._language/this._numLanguages;
+    return this._language/this._options.diffLanguages;
   },
   
   setLanguage: function(language) {
@@ -326,6 +285,10 @@ var Agent = Class.create({
     this._language = language;
     this._color = 'hsl(' + language + ', 90%, 25%)';
     this._$artefact.css('background', this._color);
+  },
+  
+  canChangeLanguage: function(){
+    return this._behavior.canChangeLanguage !== false;
   },
 
   getColor: function () {
