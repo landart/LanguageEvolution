@@ -250,7 +250,7 @@ var Agent = Class.create({
     var otherLanguage = otherAgent.getLanguage();
     var language = getRandomLanguage(this._numLanguages);
     
-    if (objectsAreEqual(this.getDictionary(), otherAgent.getDictionary())){
+    if (dictionarySimilarity(this.getDictionary(), otherAgent.getDictionary()) < this._options.dictionarySimilarityThreshold){
       
       // accept other's
       if (!thisLanguage && otherLanguage){
@@ -276,7 +276,7 @@ var Agent = Class.create({
     }
     else {
       // break equality since dictionaries are not equal and agents have a language assigned
-      if (thisLanguage == otherLanguage && thisLanguage){
+      if (thisLanguage == otherLanguage){
         this.setLanguage(language);
       }
     }

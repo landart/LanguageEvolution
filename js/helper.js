@@ -68,3 +68,16 @@ function objectsAreEqual(object1, object2){
     
     return true;
 }
+
+function dictionarySimilarity(dic1, dic2){
+  var diff = 0;
+  
+  var allKeys = $.unique($.merge(Object.keys(dic1), Object.keys(dic2)));
+  
+  for (var i in allKeys){
+    var key = allKeys[i];
+    if (dic1[key] != dic2[key]) diff ++;
+  }
+   
+  return diff/allKeys.length;
+}

@@ -21,6 +21,7 @@ var Simulation = Class.create({
     speed: 10,             
     worldSize: 60,
     similarityThreshold: 0.25,
+    dictionarySimilarityThreshold: 0.10,
     neologismFactor: 0.00001, // very low, otherwise neologisms won't allow convergence
     
     console: '#console',
