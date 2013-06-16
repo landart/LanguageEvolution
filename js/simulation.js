@@ -26,7 +26,8 @@ var Simulation = Class.create({
     
     console: '#console',
     map: '#map',
-    agentViewer: '#agent-viewer',
+    agentViewerPane: '#agent-viewer',
+    agentPropertiesPane: '#agent-properties',
     actionReset: '#action-reset',
     actionPlay: '#action-play',
     actionPause: '#action-pause',
@@ -160,7 +161,6 @@ var Simulation = Class.create({
         content: 'Shortcut <kbd>P</kbd>',
         container: 'body' });
         
-    
     $(this.options.actionPause)
       .click($.proxy(this._onPause, this))
       .popover({
@@ -222,21 +222,16 @@ var Simulation = Class.create({
       this._map.placeAtRandomCoordinates(agent);
     }
   },
-  
-  hideDictionaryTooltips: function(){
-    var allItems = this._items;
-
-    for (var i in allItems) {
-      allItems[i].$getCell().tooltip('destroy');
-    }
-  },
 
   _initConsole: function () {
     this._console = new Console({ container: this.options.console });
   },
 
   _initAgentViewer: function () {
-    this._agentViewer = new AgentViewer({ container: this.options.agentViewer }, this.getState(), this);
+    this._agentViewer = new AgentViewer({
+      mainPane: this.options.agentViewerPane,
+      propertiesPane: this.options.agentPropertiesPane
+    }, this);
   },
   
   _launchBarbarianHorde: function() {
@@ -413,6 +408,18 @@ var Simulation = Class.create({
     });
     
     delete agent;    
+  },
+
+  clearDictionaryTooltips: function() {
+    var allItems = this._items;
+
+    for (var i in allItems) {
+      allItems[i].$getCell().tooltip('destroy');
+    }
+  },
+
+  getAgents: function () {
+    return this._agents;
   }
   
 }); 

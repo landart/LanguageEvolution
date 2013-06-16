@@ -1,54 +1,94 @@
 var AgentViewer = Class.create({
 
-  defaults: { },
-  options: { },
+  defaults: {
+    noSelectionTemplate: '<a class="muted">No selection</a>'
+  },
+  options: null,
 
-  _$container: null,
+  _$mainPane: null,
+  _$propertiesPane: null,
+  _$propertiesList: null,
+  _$identifierField: null,
+  _$karmaField: null,
+  _$languageField: null,
+  _simulation: null,
   _agentViews: [],
   _agentSorting: false,
+  _agentDisplayed: null,
   
-  _displayingAgent: null,
-  _simulation: null,
-  
-  _$agentDetailsHeader: $('#agent-details-header'),
-  _$agentDetails: $('#agent-details'),
-  _agentDetailsTemplate: '<ul class="unstyled"><li class="id"><label>ID:</label> $id</li><li><label>Karma:</label> $karma</li><li><label>Language:</label> $language</li></ul>',
+  init: function (options, simulation) {
 
-  init: function (options, state, simulation) {
-
-    this._simulation = simulation || null;
+    this._simulation = simulation;
     this.options = $.extend({}, this.defaults, options);
-    this._$container = $(options.container);
+    
+    this._$mainPane = $(this.options.mainPane);
+    this._$propertiesPane = $(this.options.propertiesPane);
+
+    var agents = this._simulation.getAgents();
+
+    this._setupTemplate();
+    this._displayAgentProperties(null);
 
     // TODO: nasty glitch between redraws: cannot click on the element on that case
-    this._$container.on('click', 'div', $.proxy(this._onAgentClick, this));
+    this._$mainPane.on('click', 'div', $.proxy(this._onAgentClick, this));
 
-    for (var i in state.agents) {
-      var agent = state.agents[i];
+    for (var i in agents) {
+      var agent = agents[i];
       var $div = $(document.createElement('div'));
       
       $div.css('background-color', agent.getColor());
       $div.data('agent', agent);
       
       this._agentViews.push($div);
-      this._$container.append($div);
+      this._$mainPane.append($div);
     }
     
   },
 
   _onAgentClick: function (event) {
     var agent = $(event.target).data('agent');    
-    
-    if (agent !== this._displayingAgent) {
+
+    if (agent !== this._agentDisplayed) {
       agent.userInteraction();
-      this._displayingAgent = agent;  
-      this._showAgentDetails();
+      this._displayAgentProperties(agent);
     } else {
-      this._simulation.hideDictionaryTooltips();
-      this._displayingAgent = null;
-      this._hideAgentDetails();
+      this._simulation.clearDictionaryTooltips();
+      this._displayAgentProperties(null);
+    }   
+  },
+
+  _setupTemplate: function () {
+    this._$propertiesList = $(document.createElement('dl')).addClass('dl-horizontal');
+
+    this._$propertiesList.append($(document.createElement('dt'))
+      .text('Identifier')
+      .tooltip( { title: '' }));
+    this._$propertiesList.append(this._$identifierField = $(document.createElement('dd')));
+
+    this._$propertiesList.append($(document.createElement('dt'))
+      .text('Karma')
+      .tooltip( { title: '' }));
+    this._$propertiesList.append(this._$karmaField = $(document.createElement('dd')));
+
+    this._$propertiesList.append($(document.createElement('dt'))
+      .text('Language')
+      .tooltip( { title: '' }));
+    this._$propertiesList.append(this._$languageField = $(document.createElement('dd')));
+  },
+
+  _displayAgentProperties: function (agent) {
+    this._agentDisplayed = agent;
+
+    if (this._agentDisplayed) {
+      this._$identifierField.text('#' + agent.getIndex());
+      this._$karmaField.text(Math.round(agent.getKarma() * 1000) / 1000);
+      this._$languageField.text(agent.getDisplayLanguage());
+
+      this._$propertiesPane.empty();
+      this._$propertiesPane.append(this._$propertiesList);
+    } else {
+      this._$propertiesPane.html(this.options.noSelectionTemplate);
     }
-    
   },
   
   refresh: function() {
@@ -60,14 +100,15 @@ var AgentViewer = Class.create({
       $div.css('background-color', $div.data('agent').getColor());  
     }
     
-    if (this._displayingAgent) {
-      this._updateAgentDetails();
-      // I'd very much like it but it does a heck of an effect with the refreshing recreating everything
-      //this._displayingAgent.userInteraction();
+    if (this._agentDisplayed) {
+      this._displayAgentProperties(this._agentDisplayed);
+
+      // TODO: only update new words tooltip
+      //this._agentDisplayed.userInteraction();
     }
 
     if (this._agentSorting) {
-      elements = this._$container.children('div').detach();
+      elements = this._$mainPane.children('div').detach();
 
       // http://stackoverflow.com/questions/11923659/javascript-sort-rgb-values
       elements.sort(function(a, b) {
@@ -76,31 +117,8 @@ var AgentViewer = Class.create({
         return pusher.color(aComparable).hue() - pusher.color(bComparable).hue();
       });
 
-      this._$container.append(elements);
+      this._$mainPane.append(elements);
     }
-  },
-  
-  _showAgentDetails: function(){
-    this._$agentDetailsHeader.removeClass('hidden');    
-    this._updateAgentDetails();       
-    this._$agentDetails.removeClass('hidden');
-  },
-  
-  _updateAgentDetails: function(){
-    var agent = this._displayingAgent;
-        
-    this._$agentDetails.html(
-      this._agentDetailsTemplate
-        .replace('$id', agent.getIndex())
-        .replace('$karma',Math.round(agent.getKarma()*1000)/1000)
-        .replace('$language',agent.getDisplayLanguage())
-    );
-  },
-  
-  _hideAgentDetails: function(){
-    this._$agentDetailsHeader.addClass('hidden');
-    this._$agentDetails.addClass('hidden');
-    this._$agentDetails.html("");
   },
 
   setAgentSorting: function (value) {

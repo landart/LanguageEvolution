@@ -51,7 +51,7 @@ var Agent = Class.create({
     var allItems = this._state.items;
     var item = null;
 
-    this._simulation.hideDictionaryTooltips();
+    this._simulation.clearDictionaryTooltips();
 
     for (var dictionaryGenoma in this._dictionary) {
       for (var i in allItems) {
