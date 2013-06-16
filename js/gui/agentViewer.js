@@ -11,10 +11,11 @@ var AgentViewer = Class.create({
   _$identifierField: null,
   _$karmaField: null,
   _$languageField: null,
+  _$displayedAgent: null,
   _simulation: null,
   _agentViews: [],
   _agentSorting: false,
-  _agentDisplayed: null,
+  _displayedAgent: null,
   
   init: function (options, simulation) {
 
@@ -27,7 +28,7 @@ var AgentViewer = Class.create({
     var agents = this._simulation.getAgents();
 
     this._setupTemplate();
-    this._displayAgentProperties(null);
+    this._displayNoSelection();
 
     // TODO: nasty glitch between redraws: cannot click on the element on that case
     this._$mainPane.on('click', 'div', $.proxy(this._onAgentClick, this));
@@ -46,15 +47,26 @@ var AgentViewer = Class.create({
   },
 
   _onAgentClick: function (event) {
-    var agent = $(event.target).data('agent');    
+    var $target = $(event.target),
+        target = $target.data('agent'),
+        previous = this._displayedAgent,
+        $previous = this._$displayedAgent;    
 
-    if (agent !== this._agentDisplayed) {
-      agent.userInteraction();
-      this._displayAgentProperties(agent);
-    } else {
+    this._displayedAgent = target;
+    this._$displayedAgent = $target;
+
+    if ($previous) {
+      $previous.removeClass('selected');
+    }
+
+    if (target === previous) {
       this._simulation.clearDictionaryTooltips();
-      this._displayAgentProperties(null);
-    }   
+      this._displayNoSelection();
+    } else {
+      $target.addClass('selected');
+      this._displayAgentProperties();
+      target.userInteraction();
+    }
   },
 
   _setupTemplate: function () {
@@ -76,19 +88,17 @@ var AgentViewer = Class.create({
     this._$propertiesList.append(this._$languageField = $(document.createElement('dd')));
   },
 
-  _displayAgentProperties: function (agent) {
-    this._agentDisplayed = agent;
+  _displayNoSelection: function () {
+    this._$propertiesPane.html(this.options.noSelectionTemplate);
+  },
 
-    if (this._agentDisplayed) {
-      this._$identifierField.text('#' + agent.getIndex());
-      this._$karmaField.text(Math.round(agent.getKarma() * 1000) / 1000);
-      this._$languageField.text(agent.getDisplayLanguage());
+  _displayAgentProperties: function () {
+    this._$identifierField.text('#' + this._displayedAgent.getIndex());
+    this._$karmaField.text(Math.round(this._displayedAgent.getKarma() * 1000) / 1000);
+    this._$languageField.text(this._displayedAgent.getDisplayLanguage());
 
-      this._$propertiesPane.empty();
-      this._$propertiesPane.append(this._$propertiesList);
-    } else {
-      this._$propertiesPane.html(this.options.noSelectionTemplate);
-    }
+    this._$propertiesPane.empty();
+    this._$propertiesPane.append(this._$propertiesList);
   },
   
   refresh: function() {
@@ -97,14 +107,14 @@ var AgentViewer = Class.create({
 
     for (var i in this._agentViews) {
       $div = this._agentViews[i];
-      $div.css('background-color', $div.data('agent').getColor());  
+      $div.css('background-color', $div.data('agent').getColor());
     }
     
-    if (this._agentDisplayed) {
-      this._displayAgentProperties(this._agentDisplayed);
+    if (this._displayedAgent) {
+      this._displayAgentProperties(this._displayedAgent);
 
       // TODO: only update new words tooltip
-      //this._agentDisplayed.userInteraction();
+      //this._displayedAgent.userInteraction();
     }
 
     if (this._agentSorting) {
