@@ -32,6 +32,7 @@ var Simulation = Class.create({
     actionPause: '#action-pause',
     actionHorde: '#action-horde',
     speedSlider: '#speed-slider',
+    sortAgentSwitch: '#sort-agent-switch',
     iterationField: '#iterationField',
     ipsField: '#ipsField',    
     populationField: '#populationField',
@@ -41,9 +42,9 @@ var Simulation = Class.create({
     // http://stackoverflow.com/questions/5078913/html5-canvas-performance-calculating-loops-frames-per-second
     ipsFilter: 10,
 
-    ipsRefreshRate: 200,         // ms
+    ipsRefreshRate: 200,          // ms
     populationRefreshRate: 5000,  // ms
-    agentViewerRefreshRate: 500, // ms
+    agentViewerRefreshRate: 500,  // ms
   },
 
   // inner attributes
@@ -63,6 +64,7 @@ var Simulation = Class.create({
   _map: null,
   _agentViewer: null,
   _$speedSlider: null,
+  _$sortAgentSwitch: null,
   _$iterationField: null,
   _$ipsField: null,
   _$populationField: null,
@@ -95,6 +97,10 @@ var Simulation = Class.create({
     this._speed = this._$speedSlider.data('value') || this._speed;
   },
 
+  _onSortAgent: function (event, data) {
+    this._agentViewer.setAgentSorting(data.value);
+  },
+
   _keyHandler: function (event) {
     switch (event.keyCode) {
       case 80: // p
@@ -109,6 +115,9 @@ var Simulation = Class.create({
       case 66: // b
         this._launchBarbarianHorde();
         break;
+      case 65: // a
+        this._$sortAgentSwitch.bootstrapSwitch('toggleState');
+        break;
     }
   },
 
@@ -116,6 +125,7 @@ var Simulation = Class.create({
     var that = this;
 
     this._$speedSlider = $(this.options.speedSlider);
+    this._$sortAgentSwitch = $(this.options.sortAgentSwitch);
     this._$iterationField = $(this.options.iterationField);
     this._$ipsField = $(this.options.ipsField);
     this._$populationField = $(this.options.populationField);
@@ -173,10 +183,20 @@ var Simulation = Class.create({
         
     $(window.document).bind('keyup', $.proxy(this._keyHandler, this)); 
 
-
     this._$speedSlider
       .slider({ min: 1, max: 100, value: this._speed || 1 })
-      .on('slide', $.proxy(this._onSpeed, this))
+      .on('slide', $.proxy(this._onSpeed, this));
+
+    this._$sortAgentSwitch
+      .bootstrapSwitch()
+      .on('switch-change', $.proxy(this._onSortAgent, this))
+      .popover({
+        placement: 'right',
+        trigger: 'hover',
+        html: true,
+        title: 'Sort agent by language',
+        content: 'Shortcut <kbd>A</kbd>',
+        container: 'body' });
   },
   
   _initMap: function (){

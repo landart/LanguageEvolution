@@ -17,6 +17,9 @@
             "path": "lib/pusher-color/0.2.4/pusher.color.min.js"
         },
         {
+            "path": "lib/bootstrap-switch/js/bootstrapSwitch.js"
+        },
+        {
             "path": "js/helper.js",
             "update": "delta"
         },
@@ -69,6 +72,10 @@
         },
         {
             "path": "lib/bootstrap-slider/css/slider.css",
+            "update": "delta"
+        },
+        {
+            "path": "lib/bootstrap-switch/css/bootstrapSwitch.css",
             "update": "delta"
         },
         {

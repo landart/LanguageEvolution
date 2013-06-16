@@ -22,6 +22,7 @@
           <li><a id="action-reset" class="clickable"><i class="icon-repeat icon-white"></i></a></li>
           <li id="action-play" class="clickable"><a><i class="icon-play icon-white"></i></a></li>
           <li id="action-pause" class="clickable"><a><i class="icon-pause icon-white"></i></a></li>
+          <li class="divider-vertical"></li>
           <li id="action-horde" class="clickable"><a>Launch Barbarian Horde!</a></li>
         </ul>
         <ul class="nav pull-right">
@@ -39,8 +40,12 @@
     <div class="container" style="visibility:hidden">
       <div class="row">
         <div class="span3">
-          <div class="well">
-            <a class="nav-header">Agents</a>
+          <div class="well toolbox">
+            <h3>Agents
+              <a id="sort-agent-switch" class="switch switch-small pull-right" data-on="success">
+                <input type="checkbox" />
+              </a>
+            </h3>
             <div id="agent-viewer"></div>
             <a class="nav-header hidden" id="agent-details-header">Agent details</a>
             <div class="hidden" id="agent-details"></div>

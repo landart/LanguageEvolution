@@ -5,6 +5,7 @@ var AgentViewer = Class.create({
 
   _$container: null,
   _agentViews: [],
+  _agentSorting: false,
   
   _displayingAgent: null,
   _simulation: null,
@@ -38,12 +39,11 @@ var AgentViewer = Class.create({
   _onAgentClick: function (event) {
     var agent = $(event.target).data('agent');    
     
-    if (agent !== this._displayingAgent){
+    if (agent !== this._displayingAgent) {
       agent.userInteraction();
       this._displayingAgent = agent;  
       this._showAgentDetails();
-    }
-    else {
+    } else {
       this._simulation.hideDictionaryTooltips();
       this._displayingAgent = null;
       this._hideAgentDetails();
@@ -60,23 +60,24 @@ var AgentViewer = Class.create({
       $div.css('background-color', $div.data('agent').getColor());  
     }
     
-    if (this._displayingAgent){
+    if (this._displayingAgent) {
       this._updateAgentDetails();
       // I'd very much like it but it does a heck of an effect with the refreshing recreating everything
       //this._displayingAgent.userInteraction();
     }
 
-    // It's a bit confusing... visually appealing, but where is the last agent I just clicked on?
-    /*elements = this._$container.children('div').detach();
+    if (this._agentSorting) {
+      elements = this._$container.children('div').detach();
 
-    // http://stackoverflow.com/questions/11923659/javascript-sort-rgb-values
-    elements.sort(function(a, b) {
-      var aComparable = $(a).css('background-color');
-      var bComparable = $(b).css('background-color');
-      return pusher.color(aComparable).hue() - pusher.color(bComparable).hue();
-    });
+      // http://stackoverflow.com/questions/11923659/javascript-sort-rgb-values
+      elements.sort(function(a, b) {
+        var aComparable = $(a).css('background-color');
+        var bComparable = $(b).css('background-color');
+        return pusher.color(aComparable).hue() - pusher.color(bComparable).hue();
+      });
 
-    this._$container.append(elements);*/
+      this._$container.append(elements);
+    }
   },
   
   _showAgentDetails: function(){
@@ -100,6 +101,11 @@ var AgentViewer = Class.create({
     this._$agentDetailsHeader.addClass('hidden');
     this._$agentDetails.addClass('hidden');
     this._$agentDetails.html("");
-  }
+  },
+
+  setAgentSorting: function (value) {
+    this._agentSorting = value;
+    this.refresh();
+  },
 
 });
