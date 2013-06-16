@@ -74,17 +74,17 @@ var AgentViewer = Class.create({
 
     this._$propertiesList.append($(document.createElement('dt'))
       .text('Identifier')
-      .tooltip( { title: '' }));
+      .tooltip( { title: 'Unique identifier of agent' }));
     this._$propertiesList.append(this._$identifierField = $(document.createElement('dd')));
 
     this._$propertiesList.append($(document.createElement('dt'))
       .text('Karma')
-      .tooltip( { title: '' }));
+      .tooltip( { title: 'More karma an agent earn, more it would impose its language to others' }));
     this._$propertiesList.append(this._$karmaField = $(document.createElement('dd')));
 
     this._$propertiesList.append($(document.createElement('dt'))
       .text('Language')
-      .tooltip( { title: '' }));
+      .tooltip( { title: 'Identifier of language' }));
     this._$propertiesList.append(this._$languageField = $(document.createElement('dd')));
   },
 
