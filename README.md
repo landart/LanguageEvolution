@@ -12,3 +12,5 @@ Thus evolved languages are bond to barbarian invasions, foreigner influences and
 all common events shared by the major part of the ancient civilizations.
 
 Please read the [wiki](https://github.com/landart/LanguageEvolution/wiki) for more information about the game mechanics.
+
+You can find a live demo [here](http://landart.github.io/LanguageEvolution/)
