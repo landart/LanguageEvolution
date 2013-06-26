@@ -32,6 +32,12 @@ var Simulation = Class.create({
     actionPlay: '#action-play',
     actionPause: '#action-pause',
     actionHorde: '#action-horde',
+    buttonHelp: '#button-help',
+    buttonHelpContent: '#button-help-content',
+    buttonHelpSettler: '#button-help-settler',
+    buttonHelpSettlerContent: '#button-help-settler-content',
+    buttonHelpHorde: '#button-help-horde',
+    buttonHelpHordeContent: '#button-help-horde-content',
     speedSlider: '#speed-slider',
     sortAgentSwitch: '#sort-agent-switch',
     showDictionariesSwitch: "#show-dictionaries-switch",
@@ -180,6 +186,33 @@ var Simulation = Class.create({
         html: true,
         title: 'Pause',
         content: 'Shortcut <kbd>S</kbd>',
+        container: 'body' });
+        
+    $(this.options.buttonHelp)
+      .popover({
+        placement: 'bottom',
+        trigger: 'hover',
+        html: true,
+        title: 'Agent-Based Artificial Intelligence',
+        content: $(this.options.buttonHelpContent).html(),
+        container: 'body' });
+        
+    $(this.options.buttonHelpSettler)
+      .popover({
+        placement: 'bottom',
+        trigger: 'hover',
+        html: true,
+        title: 'Settlers & Items',
+        content: $(this.options.buttonHelpSettlerContent).html(),
+        container: 'body' });
+        
+    $(this.options.buttonHelpHorde)
+      .popover({
+        placement: 'bottom',
+        trigger: 'hover',
+        html: true,
+        title: 'Barbarian Invaders',
+        content: $(this.options.buttonHelpHordeContent).html(),
         container: 'body' });
     
     $(this.options.actionHorde)

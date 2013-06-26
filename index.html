@@ -22,8 +22,11 @@
           <li><a id="action-reset" class="clickable"><i class="icon-repeat icon-white"></i></a></li>
           <li id="action-play" class="clickable"><a><i class="icon-play icon-white"></i></a></li>
           <li id="action-pause" class="clickable"><a><i class="icon-pause icon-white"></i></a></li>
+          <li id="button-help" class="clickable"><a><i class="icon-question-sign icon-white"></i></a></li>
           <li class="divider-vertical"></li>
-          <li id="action-horde" class="clickable"><a>Launch Barbarian Horde!</a></li>
+          <li id="action-horde" class="clickable"><a>Launch Horde!</a></li>
+          <li id="button-help-horde" class="clickable"><a><i class="icon-question-sign icon-white"></i></a></li>
+          <li class="divider-vertical"></li>
         </ul>
         <ul class="nav pull-right">
           <li class="navbar-text"><p id="iterationField" class="field-wide"></p></li>
@@ -41,7 +44,8 @@
       <div class="row">
         <div class="span3">
           <div class="well toolbox">
-            <h3>Agents
+            <h3>Settlers
+              <a id="button-help-settler"><i class="icon-question-sign"></i></a>
               <a id="sort-agent-switch" class="switch switch-small pull-right" data-on="success">
                 <input type="checkbox" checked="checked" />
               </a>
@@ -78,7 +82,34 @@
       </p>
     </div>
   </footer>
-    
+  
+  <div id="button-help-content" class="hidden">
+    <p class="justify">100'000 years ago, our ancestors didn't have much of a language. By giving daily objects a name and then sharing their knowledge,
+    they managed to agree upon common dictionaries that became proto-languages. Then, these shared conventions grew by acquiring more
+    speakers until a few global languages remained.</p>
+    <p class="justify">This simulation represents that evolution of primitive languages and their whole life cycle from a general, simplified perspective.</p>
+    <p class="justify">Now, click on the "play" button on the left or just press "p" to start the simulation!</p>
+  </div>
+  <div id="button-help-settler-content" class="hidden">
+    <p class="justify">
+      Within the simulated context, a "Settler" is one pre-historic human being, represented with a color dot (pale pink in the beginning).
+      Settlers move around the map discovering new items and naming them. An "Item" is a static pale green dot on the map that has an unique genomic
+      appearance used by Settlers to match them with other similar items already discovered and so "recognize" them.
+    </p>
+    <p class="justify">
+      Whenever a Settler finds another one, they exchange and merge their dictionaries. The second Settler may name an item as the first one
+      does, or it may be the opposite, depending on each one's Karma. The Settler that "convinces" others to take its dictionary sees its Karma
+      increase, and the other's decrease. There is a chance for neologisms to appear in this transfer, which will produce new dialects even when languages
+      have converged to a common global dictionary.       
+    </p>
+  </div>
+  <div id="button-help-horde-content" class="hidden">
+    <p class="justify">
+      Barbarians are foreigners with a common dictionary that invade the terrain creating chaos. They tamper with the Settlers' dictionnaries thanks
+      to their big Karma, are immune to dictionary degradation and may occasionally kill some Settlers they encounter.
+    </p>
+  </div>
+  
   <script id ="microloader" type="text/javascript" src="lib/sencha/microloader/development.js"></script>
 
 </body>

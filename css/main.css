@@ -226,3 +226,5 @@ table tr:last-child td{
 .tooltip {
   z-index: 1010;
 }
+
+.justify { text-align: justify;}
