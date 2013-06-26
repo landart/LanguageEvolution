@@ -221,3 +221,8 @@ table tr:last-child td{
 #agent-details .id label{
   font-style: normal;
 }
+
+/* Bootstrap redefinition! */
+.tooltip {
+  z-index: 1010;
+}

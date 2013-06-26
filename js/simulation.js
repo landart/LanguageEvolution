@@ -34,6 +34,7 @@ var Simulation = Class.create({
     actionHorde: '#action-horde',
     speedSlider: '#speed-slider',
     sortAgentSwitch: '#sort-agent-switch',
+    showDictionariesSwitch: "#show-dictionaries-switch",
     iterationField: '#iterationField',
     ipsField: '#ipsField',    
     populationField: '#populationField',
@@ -66,6 +67,7 @@ var Simulation = Class.create({
   _agentViewer: null,
   _$speedSlider: null,
   _$sortAgentSwitch: null,
+  _$showDictionariesSwitch: null,
   _$iterationField: null,
   _$ipsField: null,
   _$populationField: null,
@@ -101,6 +103,11 @@ var Simulation = Class.create({
   _onSortAgent: function (event, data) {
     this._agentViewer.setAgentSorting(data.value);
   },
+  
+  _onSwitchShowDictionaries: function(event, data){
+    this.clearDictionaryTooltips();
+    this._map.setShowDictionaries(data.value);
+  },
 
   _keyHandler: function (event) {
     switch (event.keyCode) {
@@ -119,6 +126,9 @@ var Simulation = Class.create({
       case 65: // a
         this._$sortAgentSwitch.bootstrapSwitch('toggleState');
         break;
+      case 68:
+        this._showDictionariesSwitch.bootstrapSwitch('toggleState');
+        break;
     }
   },
 
@@ -127,6 +137,7 @@ var Simulation = Class.create({
 
     this._$speedSlider = $(this.options.speedSlider);
     this._$sortAgentSwitch = $(this.options.sortAgentSwitch);
+    this._$showDictionariesSwitch = $(this.options.showDictionariesSwitch);
     this._$iterationField = $(this.options.iterationField);
     this._$ipsField = $(this.options.ipsField);
     this._$populationField = $(this.options.populationField);
@@ -196,7 +207,20 @@ var Simulation = Class.create({
         html: true,
         title: 'Sort agent by language',
         content: 'Shortcut <kbd>A</kbd>',
-        container: 'body' });
+        container: 'body' 
+      });
+        
+    this._$showDictionariesSwitch
+      .bootstrapSwitch()
+      .on('switch-change', $.proxy(this._onSwitchShowDictionaries, this))
+      .popover({
+        placement: 'right',
+        trigger: 'hover',
+        html: true,
+        title: 'Show or hide the dictionaries on the map',
+        content: 'Shortcut <kbd>D</kbd>',
+        container: 'body'
+      });
   },
   
   _initMap: function (){

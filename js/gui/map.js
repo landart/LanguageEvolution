@@ -7,6 +7,7 @@ var Map = Class.create({
 
   _$target: null,
   _cells: [],
+  _showDictionaries: true,
 
 
   init: function (target, options) {
@@ -18,7 +19,7 @@ var Map = Class.create({
     this._buildStructure();
 
     this._$target.on('click', 'td', function () {
-      if (this.element && this.element.userInteraction) {
+      if (this.element && this.element.userInteraction && this._showDictionaries) {
         this.element.userInteraction();
       }
     });
@@ -228,6 +229,10 @@ var Map = Class.create({
         }
         return false;
     }
+  },
+  
+  setShowDictionaries: function(value){
+    this._showDictionaries = value ? true : false;
   }
 
 });
