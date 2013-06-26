@@ -130,7 +130,7 @@ var Simulation = Class.create({
     this._$iterationField = $(this.options.iterationField);
     this._$ipsField = $(this.options.ipsField);
     this._$populationField = $(this.options.populationField);
-
+    
     this._$iterationField
       .tooltip({ placement: 'bottom', trigger: 'hover', title: 'Number of iterations' });
     this._$ipsField
@@ -232,6 +232,11 @@ var Simulation = Class.create({
       mainPane: this.options.agentViewerPane,
       propertiesPane: this.options.agentPropertiesPane
     }, this);
+    
+    if (this._$sortAgentSwitch.find('input').is(':checked')){
+      this._agentViewer.setAgentSorting(true);
+    }
+
   },
   
   _launchBarbarianHorde: function() {
