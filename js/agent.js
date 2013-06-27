@@ -48,26 +48,7 @@ var Agent = Class.create({
   }, 
 
   userInteraction: function () {
-    var allItems = this._state.items;
-    var item = null;
-
-    this._simulation.clearDictionaryTooltips();
-
-    for (var dictionaryGenoma in this._dictionary) {
-      for (var i in allItems) {
-        var item = allItems[i];
-        if (genomicSimilarity(dictionaryGenoma, item.getGenoma()) < this._options.similarityThreshold) {
-          item.$getCell()
-            .tooltip({
-              container: 'body',
-              title: this._dictionary[item.getGenoma()],
-              trigger: 'manual' })
-            .tooltip('show');
-          break;
-        }
-      }
-    }
-
+    this._simulation.getMap().showDictionary(this._dictionary, this._options.similarityThreshold);
   },
 
   tick: function () {

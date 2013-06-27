@@ -6,15 +6,18 @@ var Map = Class.create({
   },
 
   _$target: null,
+  _simulation: null,
   _cells: [],
-  _showDictionaries: true,
 
 
-  init: function (target, options) {
+  init: function (target, simulation, options) {
     var that = this;
 
     this._$target = $(target);
+    this._simulation = simulation;
     this.options = jQuery.extend(this['default'], options || {});
+
+    this._simulation.addObserver('showDictionary', $.proxy(this._onShowDictionaryOptionChange, this));
 
     this._buildStructure();
 
@@ -23,6 +26,13 @@ var Map = Class.create({
         this.element.userInteraction();
       }
     });
+  },
+
+
+  _onShowDictionaryOptionChange: function (key, value) {
+    if (!value) {
+      this.clearDictionary();
+    }
   },
 
 
@@ -231,8 +241,37 @@ var Map = Class.create({
     }
   },
   
-  setShowDictionaries: function(value){
-    this._showDictionaries = value ? true : false;
+  clearDictionary: function () {
+    var allItems = this._simulation.getItems();
+    for (var i in allItems) {
+      allItems[i].$getCell().tooltip('destroy');
+    }
+  },
+
+  showDictionary: function (dictionary, similarityThreshold) {
+    var allItems = this._simulation.getItems();
+
+    this.clearDictionary();
+
+    if (this._simulation.options.showDictionary) {
+
+      for (var genoma in dictionary) {
+        for (var i in allItems) {
+          var item = allItems[i];
+          if (genomicSimilarity(genoma, item.getGenoma()) < similarityThreshold) {
+            item.$getCell()
+              .tooltip({
+                container: 'body',
+                title: dictionary[item.getGenoma()],
+                trigger: 'manual' })
+              .tooltip('show');
+            break;
+          }
+        }
+      }
+
+    }
+
   }
 
 });

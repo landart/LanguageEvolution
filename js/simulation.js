@@ -53,9 +53,13 @@ var Simulation = Class.create({
     ipsRefreshRate: 200,          // ms
     populationRefreshRate: 5000,  // ms
     agentViewerRefreshRate: 500,  // ms
+
+    showDictionary: true
   },
 
   // inner attributes
+  _observers: [],
+
   _agents: [],   
   _items: [],  
   _simulationTimeout: null,
@@ -71,6 +75,7 @@ var Simulation = Class.create({
   _console: null,
   _map: null,
   _agentViewer: null,
+
   _$speedSlider: null,
   _$sortAgentSwitch: null,
   _$showDictionariesSwitch: null,
@@ -110,9 +115,8 @@ var Simulation = Class.create({
     this._agentViewer.setAgentSorting(data.value);
   },
   
-  _onSwitchShowDictionaries: function(event, data){
-    this.clearDictionaryTooltips();
-    this._map.setShowDictionaries(data.value);
+  _onSwitchShowDictionaries: function(event, data) {
+    this.setOption('showDictionary', data.value);
   },
 
   _keyHandler: function (event) {
@@ -132,8 +136,8 @@ var Simulation = Class.create({
       case 65: // a
         this._$sortAgentSwitch.bootstrapSwitch('toggleState');
         break;
-      case 68:
-        this._showDictionariesSwitch.bootstrapSwitch('toggleState');
+      case 68: // d
+        this._$showDictionariesSwitch.bootstrapSwitch('toggleState');
         break;
     }
   },
@@ -257,7 +261,7 @@ var Simulation = Class.create({
   },
   
   _initMap: function (){
-    this._map = new Map(this.options.map, {
+    this._map = new Map(this.options.map, this, {
       size: this.options.worldSize,
     });
   },
@@ -472,18 +476,49 @@ var Simulation = Class.create({
     delete agent;    
   },
 
-  clearDictionaryTooltips: function() {
-    var allItems = this._items;
+  getAgents: function () {
+    return this._agents;
+  },
 
-    for (var i in allItems) {
-      allItems[i].$getCell().tooltip('destroy');
+  getItems: function () {
+    return this._items;
+  },
+
+  getMap: function () {
+    return this._map;
+  },
+
+  setOption: function (key, value) {
+    var observers = this._observers[key];
+
+    this.options[key] = value;
+
+    if (observers !== undefined && observers.length > 0) {
+      for (var i in observers) {
+        var observer = observers[i];
+        if (observer !== undefined && typeof(observer) === 'function') {
+          observer(key, value);
+        }
+      }
     }
   },
 
-  getAgents: function () {
-    return this._agents;
+  addObserver: function (key, callback) {
+    var observers = this._observers[key];
+
+    if (observers === undefined) {
+      this._observers[key] = [ callback ];
+    } else if (! $.inArray(callback, observers)) {
+      observers.push(callback);
+    }
+  },
+
+  removeObserver: function (key, callback) {
+    this._observers[key] = $.grep(this._observers[key], function (value, index) {
+      return callback !== value;
+    });
   }
-  
+
 }); 
 
 var evolution = new Simulation();
