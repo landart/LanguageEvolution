@@ -1,6 +1,8 @@
 # Language Evolution
 
-## An agent-based simulation of language evolution.
+by [Jorge Albaladejo](http://ch.linkedin.com/in/jorgealbaladejo) and [Nicolas Jakob](http://ch.linkedin.com/in/njakob).
+
+## Introduction
 
 Language Evolution is a simulation game that tries to reproduce and explain the natural language evolution 
 that happened among humans many thousand years ago. Modeled as an agent-based system, it uses independent
@@ -11,6 +13,8 @@ personal dictionary, then share it with other agents until they reach an agreeme
 Thus evolved languages are bond to barbarian invasions, foreigner influences and random neologism generation,
 all common events shared by the major part of the ancient civilizations.
 
-Please read the [wiki](https://github.com/landart/LanguageEvolution/wiki) for more information about the game mechanics.
+Please read the [wiki](wiki/) for more information about the game mechanics.
+
+## Live demo
 
 You can find a live demo [here](http://landart.github.io/LanguageEvolution/)
