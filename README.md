@@ -13,7 +13,7 @@ personal dictionary, then share it with other agents until they reach an agreeme
 Thus evolved languages are bond to barbarian invasions, foreigner influences and random neologism generation,
 all common events shared by the major part of the ancient civilizations.
 
-Please read the [wiki](wiki/) for more information about the game mechanics.
+Please read the [wiki](https://github.com/landart/LanguageEvolution/wiki) for more information about the game mechanics.
 
 ## Live demo
 
